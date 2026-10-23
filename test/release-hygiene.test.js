@@ -18,6 +18,7 @@ const ALLOWED = [
   /^public\/fonts\/OFL\.txt$/, /^public\/fonts\/dm-sans-latin(-ext)?-[456]00-normal\.woff2$/,
   /^seed\/sample-recipes\.json$/,
   /^scripts\/[a-z0-9-]+\.(sh|mjs)$/,
+  /^docs\/[a-z0-9-]+\.md$/,
   /^test\/[a-z-]+(\.test)?\.js$/,
 ];
 
