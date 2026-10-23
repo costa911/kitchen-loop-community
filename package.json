@@ -1,0 +1,14 @@
+{
+  "name": "kitchen-loop-community",
+  "version": "0.1.0",
+  "description": "The Kitchen Loop Community Edition — a self-hosted recipe, meal-planning and shopping-list app for one household.",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  }
+}

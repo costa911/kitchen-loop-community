@@ -1,0 +1,8 @@
+# Allowlist: only what the image needs is sent to the build.
+*
+!server.js
+!package.json
+!LICENSE
+!lib/
+!public/
+!seed/

@@ -1,0 +1,16 @@
+# Household data — never commit
+/data/
+*.bak
+*.tmp
+
+# Local environment
+.env
+.dev.vars*
+.wrangler/
+node_modules/
+.DS_Store
+*.sqlite
+*.db
+
+# Working drafts kept locally, not part of the release
+*.docx

@@ -1,0 +1,210 @@
+{
+  "_comment": "First-run recipes. The 15 marked origin \"kitchen-loop\" are Andrea Costa's published The Kitchen Loop recipes: their cooking methods are deliberately not included here — each links to its original TikTok, Instagram and Threads post. The 3 recipes without an origin are invented samples with full written methods. Used only when a new installation has no data file yet.",
+  "recipes": [
+    {
+      "id": "tkl-lasagna",
+      "name": "Lasagna",
+      "tags": "Dinner",
+      "ingredients": "Garlic, Onion, Carrots, Celery, Tomato Paste, Canned Peeled Tomatoes, Beef Mince, Pancetta, Milk, Flour, Butter, Olive Oil, Nutmeg, Beef Stock, Lasagna Sheets, Mozzarella, Grated Cheese, Fresh Basil",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7665023501228674306",
+      "instagramLink": "https://www.instagram.com/p/DbEKRhujgQG/",
+      "threadsLink": "https://www.threads.com/share/_dNNQ4jrQ/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-sausage-peas-pasta",
+      "name": "Sausage & Peas Pasta",
+      "tags": "Dinner, Pasta",
+      "ingredients": "Sausage, Pasta, Frozen Peas, Garlic, Onion, Cornflour, Vinegar, Dry Rosemary, Dry Thyme, Salt, Grated Cheese",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7666139808246402326",
+      "instagramLink": "https://www.instagram.com/p/DbLue7NDd_f/",
+      "threadsLink": "https://www.threads.com/share/_nYi5tEBQ/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-daddys-tzatziki",
+      "name": "Daddy's Tzatziki",
+      "tags": "Dressing",
+      "ingredients": "Greek Yogurt, Lemon Juice, Garlic, Olive Oil, Cumin, Paprika, Salt, Black Pepper",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7670232543165287702",
+      "instagramLink": "https://www.instagram.com/p/DboIkREDj2u/",
+      "threadsLink": "https://www.threads.com/share/_rcuidqit/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-coconut-daal",
+      "name": "Coconut Daal",
+      "tags": "Dinner",
+      "ingredients": "Onion, Garlic, Ginger, Cayenne Pepper, Curry Powder, Turmeric, Tomato Paste, Red Lentils, Canned Coconut Milk, Vegetable Stock, Black Pepper, Salt, Frozen Peas, Fresh Coriander, Fresh Parsley, Basmati Rice, Greek Yogurt, Bombay Mix",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7671722894937967894",
+      "instagramLink": "https://www.instagram.com/p/Dbyd6H-jmre/",
+      "threadsLink": "https://www.threads.com/share/BAmFX3MrX4/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-mac-cheese",
+      "name": "Mac & Cheese",
+      "tags": "Dinner, Pasta",
+      "ingredients": "Pasta, Cheddar, Red Leicester, Milk, Flour, Olive Oil, Butter, Garlic Cloves (Whole), Salt, Pepper, Nutmeg, Breadcrumbs, Dried Thyme, Dried Rosemary, Grated Cheese",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7673223302134926614",
+      "instagramLink": "https://www.instagram.com/p/Db84RmCjsTy/",
+      "threadsLink": "https://www.threads.com/share/_vO0ZZQID/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-grandpas-hilton-courgette-cold-salad",
+      "name": "Grandpa's Hilton Courgette Cold Salad",
+      "tags": "Lunch, Side",
+      "ingredients": "Courgettes, Lemon, Olive Oil, Salt, Black Pepper, Dried Thyme, Dried Rosemary, Garlic Cloves, Grated Cheese, Fresh Basil",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7675424302774127894",
+      "instagramLink": "https://www.instagram.com/p/DcMJ8lgjgcA/",
+      "threadsLink": "https://www.threads.com/share/BAVLfmg0Yl/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-greek-yogurt-dressing",
+      "name": "Greek Yogurt ? = Dressing",
+      "tags": "Dressing",
+      "ingredients": "Greek Yogurt, Garlic, Smoked Paprika, Olive Oil, Soy Sauce, English Mustard, Lemon Juice, Salt, Pepper",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7677268637585001750",
+      "instagramLink": "https://www.instagram.com/p/DcY8rU4DuBU/",
+      "threadsLink": "https://www.threads.com/share/_g1gFg2qY/",
+      "origin": "kitchen-loop",
+      "cookDates": [],
+      "pairsWith": "Chicken Mince Wraps"
+    },
+    {
+      "id": "tkl-chicken-mince-wraps",
+      "name": "Chicken Mince Wraps",
+      "tags": "Dinner",
+      "ingredients": "Wraps, Chicken Mince, Salt, Black Pepper, Smoked Paprika, Worcestershire Sauce, Lemon, Red Onion, Beef Tomatoes, Cucumber",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7679358567924665622",
+      "instagramLink": "https://www.instagram.com/p/Dcnkcn5jRp9/",
+      "threadsLink": "https://www.threads.com/share/BAUSLw7jTQ/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-aubergine-katsu-curry",
+      "name": "Aubergine Katsu Curry",
+      "tags": "Dinner",
+      "ingredients": "Aubergine, Carrot, Cornflour, Curry Powder, Eggs, Garam Masala, Garlic, Ginger, Honey, Lemon, Onion, Panko Breadcrumbs, Sesame Oil, Sesame Seeds, Soy Sauce, Spring Onion, Vegetable Stock",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7682339887348976918",
+      "instagramLink": "https://www.instagram.com/p/Dc8OnSDjsOL/",
+      "threadsLink": "https://www.threads.com/share/BASnry_V8N/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-tahini-lampuki",
+      "name": "Tahini Lampuki",
+      "tags": "Dinner",
+      "ingredients": "Lampuki, Almonds, Chilli, Fresh Coriander, Garlic, Lemon, Orange Zest, Paprika Smokey, Paprika Sweet, Rice, Sesame Oil, Sesame Seeds, Tahini",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7684384705914981654",
+      "instagramLink": "https://www.instagram.com/p/DdKU4r3DsmY/",
+      "threadsLink": "https://www.threads.com/share/BBQ95i1mNJ/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-whipped-feta-dip",
+      "name": "Whipped Feta Dip",
+      "tags": "Dressing",
+      "ingredients": "Feta, Greek Yogurt, Honey, Salt, Black Pepper",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7686185596997471510",
+      "instagramLink": "https://www.instagram.com/p/DdW05deDhES/",
+      "threadsLink": "https://www.threads.com/share/_vogjsCPg/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-pasta-aurora",
+      "name": "Pasta Aurora",
+      "tags": "Dinner, Pasta",
+      "ingredients": "Tortellini, Tomato Passata, Onion, Garlic, Olive Oil, Butter, Flour, Milk, Nutmeg, Salt, Black Pepper, Fresh Basil, Grated Cheese",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7687688221383200022",
+      "instagramLink": "https://www.instagram.com/p/DdhP02XjgFT/",
+      "threadsLink": "https://www.threads.com/share/BAM4QhLPuX/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-chicken-laksa",
+      "name": "Chicken Laksa",
+      "tags": "Dinner",
+      "ingredients": "Onion, Garlic, Ginger, Fresh Red Chilli, Cherry Tomatoes, Tumeric, Fresh Coriander, Brown Sugar, Miso Paste, Canned Coconut Milk, Chicken Drumsticks, Cornflour, Paprika, Salt, Chicken Stock, Fish Sauce, Soy Sauce, Black Pepper, Cumin, Rice Noodles, Egg Noodles",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7690229988439723286",
+      "instagramLink": "https://www.instagram.com/p/Ddy40SpjlSR/",
+      "threadsLink": "https://www.threads.com/share/BAlm2ZUim2/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-bean-n-egg-salad",
+      "name": "Bean 'n' Egg Salad",
+      "tags": "Dinner, Lunch",
+      "ingredients": "Kidney Beans, Chickpeas, Sweet Corn, Quinoa, Veg Stock, Eggs, Onion, Peppers, Carrots, Cucumber, Tomatoes, Paprika, Black Pepper, Salt, Tahini, Lemon Juice, Garlic, Soy Sauce, Honey, Cold Water",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7692334825830681878",
+      "instagramLink": "https://www.instagram.com/p/DeBfa0bjvGQ/",
+      "threadsLink": "https://www.threads.com/share/_yJbfb1cE/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "tkl-chorizo-leek-potato-soup",
+      "name": "Chorizo, Leek & Potato Soup",
+      "tags": "Dinner",
+      "ingredients": "Bay Leaf, Chorizo, Cornflour, Cumin, Fresh Parsley, Leeks, Paprika Sweet, Potato, Vegetable Stock",
+      "notes": "",
+      "tiktokLink": "https://www.tiktok.com/@the_kitchen_loop/photo/7698444738369686806",
+      "instagramLink": "https://www.instagram.com/p/Der4vXsDoaY/",
+      "threadsLink": "https://www.threads.com/share/BALePnGyJn/",
+      "origin": "kitchen-loop",
+      "cookDates": []
+    },
+    {
+      "id": "sample-01",
+      "name": "Lemon Herb Roast Chicken Traybake",
+      "tags": "Dinner",
+      "ingredients": "Chicken Thighs, Potato, Lemon, Garlic, Fresh Rosemary, Olive Oil, Salt, Black Pepper",
+      "notes": "Method (serves 4):\n1. Heat the oven to 200°C (180°C fan).\n2. Cut the potatoes into 3 cm chunks and spread them on a large roasting tray.\n3. Add the chicken thighs, skin side up, between the potatoes.\n4. Crush the garlic cloves with the flat of a knife and tuck them in with the rosemary sprigs.\n5. Halve the lemon, squeeze the juice over everything, then add the squeezed halves to the tray.\n6. Drizzle with olive oil, season well with salt and black pepper, and toss the potatoes to coat.\n7. Roast for 45 minutes, turning the potatoes halfway, until the chicken is golden and cooked through (75°C in the thickest part) and the potatoes are crisp.\n8. Rest for 5 minutes and spoon the tray juices over before serving.",
+      "cookDates": []
+    },
+    {
+      "id": "sample-04",
+      "name": "Sheet-Pan Salmon with Green Beans",
+      "tags": "Dinner",
+      "ingredients": "Salmon Fillets, Frozen Green Beans, Lemon, Soy Sauce, Honey, Garlic, Sesame Seeds",
+      "notes": "Method (serves 4):\n1. Heat the oven to 200°C (180°C fan) and line a baking tray with baking paper.\n2. Mix 2 tbsp soy sauce, 1 tbsp honey, 1 crushed garlic clove and the juice of half the lemon in a small bowl.\n3. Spread the green beans on the tray, add a splash of oil and a pinch of salt, and roast for 5 minutes.\n4. Push the beans to the sides, lay the salmon fillets in the middle and brush them generously with the glaze.\n5. Roast for 12–15 minutes, until the salmon flakes easily.\n6. Scatter the sesame seeds over the salmon, squeeze over the remaining lemon and serve straight from the tray.",
+      "cookDates": []
+    },
+    {
+      "id": "sample-07",
+      "name": "Mediterranean Lamb Meatballs",
+      "tags": "Dinner",
+      "ingredients": "Lamb Mince, Feta, Fresh Mint, Onion, Passata, Cous Cous, Cumin",
+      "notes": "Method (serves 4):\n1. Heat the oven to 200°C (180°C fan) and line a baking tray with baking paper.\n2. Finely chop the onion and half the mint. Crumble half the feta.\n3. In a bowl, mix the lamb mince, onion, chopped mint, crumbled feta, 1 tsp cumin, salt and pepper with your hands until just combined.\n4. Roll into 16 walnut-sized meatballs and bake for 15 minutes.\n5. Meanwhile, warm the passata in a wide pan with a pinch of salt and simmer for 5 minutes.\n6. Add the baked meatballs to the sauce and simmer for 10 minutes more.\n7. Pour boiling water over the couscous (1:1.25 by volume), cover for 5 minutes, then fluff with a fork.\n8. Serve the meatballs and sauce over the couscous, topped with the remaining feta and mint.",
+      "cookDates": []
+    }
+  ]
+}

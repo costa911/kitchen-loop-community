@@ -1,0 +1,36 @@
+# The Kitchen Loop — Community Edition
+#   docker compose up -d        (or: podman compose up -d / podman-compose up -d)
+# then open http://localhost:8080
+
+name: kitchen-loop
+
+services:
+  kitchen-loop:
+    build: .
+    restart: unless-stopped
+    ports:
+      # Published on the host's loopback interface only: reachable from this computer,
+      # not from other devices on the network. The app also rejects any request that is
+      # not addressed to localhost, as a second layer of protection.
+      - "127.0.0.1:${KITCHEN_LOOP_PORT:-8080}:8080"
+    volumes:
+      - kitchen-loop-community-data:/data
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8080/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  # Named volume managed by Docker/Podman. It survives `down`, restarts, rebuilds and
+  # upgrades; only `docker compose down -v` deletes it. See README for backup/restore.
+  kitchen-loop-community-data:

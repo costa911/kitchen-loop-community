@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Kitchen Loop</title>
+  <link rel="icon" type="image/png" href="thekitchenloop.png" />
+  <style>
+    /* DM Sans is bundled locally (SIL Open Font License, see fonts/OFL.txt). Optional telemetry is disabled until the user enables it in Privacy. */
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/dm-sans-latin-ext-400-normal.woff2) format('woff2'); unicode-range: U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/dm-sans-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/dm-sans-latin-ext-500-normal.woff2) format('woff2'); unicode-range: U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/dm-sans-latin-500-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/dm-sans-latin-ext-600-normal.woff2) format('woff2'); unicode-range: U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/dm-sans-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f7f6f2; --surface: #fff; --border: #e5e3dc; --border-mid: #ccc9be;
+      --text: #1a1917; --text-muted: #6b6860; --text-faint: #a09d96;
+      --accent: #2d6a4f; --accent-light: #d8f3dc; --accent-text: #1b4332;
+      --danger: #e63946; --info: #3a86ff;
+      --radius: 10px; --radius-sm: 6px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 50; }
+    .logo { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    nav { display: flex; gap: 4px; }
+    nav button { padding: 6px 14px; border-radius: 20px; border: none; background: transparent; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    nav button:hover { background: var(--bg); color: var(--text); }
+    nav button.active { background: var(--text); color: var(--surface); }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .view { display: none; } .view.active { display: block; }
+    .page-header { margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .page-header-text h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .page-header-text p { font-size: 13px; color: var(--text-muted); }
+    .back-btn { background: none; border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--text-muted); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .back-btn:hover { background: var(--bg); color: var(--text); }
+
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; box-shadow: var(--shadow); cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+    .stat-card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-md); }
+    .stat-card.active-stat { border-color: var(--text); }
+    .stat-num { font-size: 28px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--text-muted); }
+    .stat-sub { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
+
+    /* Heatmap */
+    .heatmap-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
+    .heatmap-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .heatmap-scroll { position: relative; }
+    .heatmap-grid { display: grid; grid-template-rows: repeat(7, 12px); grid-auto-flow: column; gap: 3px; width: fit-content; }
+    .hm-cell { width: 12px; height: 12px; border-radius: 2px; background: var(--bg); border: 1px solid var(--border); cursor: default; position: relative; }
+    .hm-cell[data-n="1"] { background: #b7e4c7; border-color: #b7e4c7; }
+    .hm-cell[data-n="2"] { background: #52b788; border-color: #52b788; }
+    .hm-cell[data-n="3"] { background: #2d6a4f; border-color: #2d6a4f; }
+    .heatmap-legend { display: flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 11px; color: var(--text-faint); }
+    .hm-legend-cell { width: 12px; height: 12px; border-radius: 2px; }
+
+    /* Recipe grid */
+    .toolbar { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .toolbar input, .toolbar select { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+    .toolbar input { flex: 1; min-width: 180px; }
+    .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+    .recipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); }
+    .recipe-card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-md); }
+    .recipe-card h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; }
+    .recipe-card h3.has-origin { display: flex; align-items: center; gap: 6px; }
+    .origin-icon { width: 22px; height: 22px; flex: none; }
+    .origin-label { display: none; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin: -4px 0 10px; }
+    .origin-label.show { display: flex; }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+    .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .tag.dinner { background: #e8f4e8; color: #2d6a4f; border-color: transparent; }
+    .tag.pasta { background: #fff3e0; color: #8b5000; border-color: transparent; }
+    .tag.dessert { background: #fdf0fb; color: #8b2080; border-color: transparent; }
+    .tag.lunch { background: #e8f1ff; color: #1a4fa0; border-color: transparent; }
+    .tag.breakfast { background: #fff8e1; color: #8b6500; border-color: transparent; }
+    .tag.side { background: #f0ede8; color: #6b5a3e; border-color: transparent; }
+    .tag.dressing { background: #e5f5f3; color: #0f6e63; border-color: transparent; }
+    .plan-side-note { font-size: 10px; color: #6b5a3e; background: #f0ede8; border-radius: 4px; padding: 2px 6px; margin-top: 4px; display: inline-block; }
+    .cook-count { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
+    .cook-count.cooked { color: var(--accent); font-weight: 500; }
+    .card-ingredients { font-size: 11px; color: var(--text-faint); line-height: 1.5; margin-bottom: 6px; }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted); font-size: 14px; }
+    .empty-icon { font-size: 40px; margin-bottom: 1rem; opacity: 0.3; }
+
+    /* Category browser */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); text-align: center; }
+    .cat-card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-md); }
+    .cat-card .cat-icon { font-size: 28px; margin-bottom: 8px; }
+    .cat-card .cat-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .cat-card .cat-count { font-size: 12px; color: var(--text-muted); }
+
+    /* Cook log table */
+    .log-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .log-table th { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: left; }
+    .log-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+    .log-table tr:last-child td { border-bottom: none; }
+    .log-table tr:hover td { background: var(--bg); }
+    .log-table th.sortable { cursor: pointer; user-select: none; }
+    .log-table th.sortable:hover { color: var(--text); }
+    .log-table th.sortable .sort-arrow { opacity: 0.5; margin-left: 3px; }
+    .cook-adjust { display: flex; align-items: center; gap: 8px; }
+    .adj-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 16px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+    .adj-btn:hover { background: var(--bg); border-color: var(--border-mid); }
+    .adj-btn.minus:hover { color: var(--danger); border-color: var(--danger); }
+    .adj-btn.plus:hover { color: var(--accent); border-color: var(--accent); }
+    .cook-num { font-size: 15px; font-weight: 600; min-width: 20px; text-align: center; }
+
+    /* Tooltip */
+    .tooltip-wrap { position: relative; display: inline-block; cursor: default; }
+    .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--text); color: var(--surface); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 12px; line-height: 1.8; white-space: nowrap; z-index: 10; box-shadow: var(--shadow-md); }
+    .tooltip-wrap .tooltip-box::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--text); }
+    .tooltip-wrap:hover .tooltip-box { display: block; }
+    .cook-num-link { color: var(--accent); font-weight: 600; text-decoration: underline dotted; cursor: help; }
+
+    /* Forms */
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); max-width: 680px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+    .form-group input, .form-group textarea { padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; resize: vertical; }
+    .cat-picker { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cat-pill { font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; user-select: none; }
+    .cat-pill:hover { border-color: var(--border-mid); }
+    .cat-pill.selected { background: var(--text); color: var(--surface); border-color: var(--text); }
+    .btn { padding: 8px 18px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+    .btn-primary { background: var(--text); color: var(--surface); }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-secondary { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--bg); }
+    .btn-icon { display: inline-flex; align-items: center; justify-content: center; padding: 8px 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; }
+    .btn-icon:hover { background: var(--bg); color: var(--text); }
+    .btn-icon svg { width: 16px; height: 16px; display: block; }
+    .btn-danger { background: transparent; color: var(--danger); border-color: var(--border); }
+    .btn-danger:hover { background: #fff0f0; }
+    .btn-cook { background: var(--accent-light); color: var(--accent-text); border-color: transparent; font-weight: 600; padding: 8px 16px; }
+    .btn-cook:hover { background: #c2e8c8; }
+    .btn-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1rem; }
+
+    /* Plan */
+    .plan-section-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 1.25rem 0 0.75rem; }
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; position: relative; box-shadow: var(--shadow); }
+    .plan-day { font-size: 10px; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+    .plan-recipe { font-size: 12px; font-weight: 500; line-height: 1.4; }
+    .plan-remove { position: absolute; top: 6px; right: 8px; background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 16px; line-height: 1; padding: 0; }
+    .plan-remove:hover { color: var(--danger); }
+    .plan-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .plan-extras-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0 0.5rem; }
+    .plan-extra-card { border-radius: var(--radius); padding: 10px 12px; position: relative; box-shadow: var(--shadow); }
+    .plan-extra-lunch { background: #e8f4fd; border: 1px solid #b8d9f0; }
+    .plan-extra-dessert { background: #fdf0fb; border: 1px solid #e8c0e0; }
+    .plan-extra-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+
+    /* Plan tabs */
+    .plan-tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; }
+    .plan-tab { padding: 6px 14px; border-radius: 20px; border: none; background: transparent; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .plan-tab:hover { background: var(--bg); color: var(--text); }
+    .plan-tab.active { background: var(--text); color: var(--surface); }
+    .plan-tick { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-faint); cursor: pointer; font-size: 11px; line-height: 1; transition: all 0.15s; margin-top: 6px; flex-shrink: 0; font-family: 'DM Sans', sans-serif; padding: 0; }
+    .plan-tick:hover { border-color: var(--accent); color: var(--accent-text); background: var(--accent-light); }
+    .plan-tick.ticked { background: var(--accent-light); border-color: var(--accent); color: var(--accent-text); cursor: default; }
+    .plan-card.plan-cooked { background: #f0faf2; border-color: #c8e6c9; }
+    .plan-card.plan-cooked .plan-recipe { text-decoration: line-through; opacity: 0.6; }
+    .plan-extra-card.plan-cooked .plan-recipe { text-decoration: line-through; opacity: 0.6; }
+    .plan-cooked-date { font-size: 10px; color: var(--accent-text); margin-top: 2px; }
+    .plan-history-entry { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden; }
+    .plan-history-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; user-select: none; transition: background 0.15s; gap: 12px; }
+    .plan-history-header:hover { background: var(--bg); }
+    .plan-history-label { font-size: 14px; font-weight: 600; flex: 1; }
+    .plan-history-meta { font-size: 12px; color: var(--text-muted); }
+    .plan-history-toggle { font-size: 11px; color: var(--text-faint); }
+    .plan-history-body { padding: 0 16px 16px; border-top: 1px solid var(--border); }
+    .plan-history-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
+    .plan-history-card.plan-cooked { background: var(--accent-light); border-color: #c8e6c9; }
+    .plan-history-card.plan-cooked .plan-recipe { text-decoration: line-through; opacity: 0.6; }
+
+    /* Custom list */
+    .custom-list-search-wrap { position: relative; max-width: 420px; margin-bottom: 1.25rem; }
+    .custom-list-search-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); max-height: 240px; overflow-y: auto; z-index: 20; display: none; }
+    .custom-list-search-results.open { display: block; }
+    .custom-list-search-result { padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    .custom-list-search-result:hover { background: var(--bg); }
+    .custom-list-search-result.disabled { color: var(--text-faint); cursor: default; }
+    .custom-list-search-result.disabled:hover { background: none; }
+    .custom-list-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .custom-list-chip { display: flex; align-items: center; gap: 6px; background: var(--accent-light); border: 1px solid var(--accent); color: var(--accent-text); border-radius: 20px; padding: 6px 8px 6px 14px; font-size: 13px; font-weight: 500; }
+    .custom-list-chip button { background: none; border: none; color: inherit; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; display: flex; align-items: center; opacity: 0.7; }
+    .custom-list-chip button:hover { opacity: 1; }
+
+    /* Shopping */
+    .shopping-section { margin-bottom: 2rem; }
+    .shopping-section h3 { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    .shopping-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; }
+    .shopping-item { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 0; cursor: pointer; user-select: none; }
+    .shopping-item input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--accent); flex-shrink: 0; }
+    .shopping-item.checked { text-decoration: line-through; color: var(--text-faint); }
+    .shopping-count { display: inline-flex; align-items: center; justify-content: center; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; font-size: 11px; color: var(--text-muted); padding: 1px 8px; margin-left: 8px; font-weight: 500; }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; max-width: 560px; width: 100%; max-height: 88vh; overflow-y: auto; box-shadow: var(--shadow-md); position: relative; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 22px; color: var(--text-faint); cursor: pointer; }
+    .modal-close:hover { color: var(--text); }
+    #modal-view h2 { font-size: 17px; font-weight: 600; margin-bottom: 10px; padding-right: 2rem; }
+    .modal-sec-label { font-size: 11px; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 6px; }
+    .modal-ingredients { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+    .modal-notes-box { font-size: 13px; color: var(--text-muted); font-style: italic; background: var(--bg); border-radius: var(--radius-sm); padding: 8px 12px; white-space: pre-line; }
+    .method-link-wrap { margin: 16px 0 4px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); }
+    .method-link-wrap .btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+    .method-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.45; }
+    .cook-banner { display: flex; align-items: center; justify-content: space-between; background: var(--accent-light); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 1rem; gap: 12px; }
+    .cook-banner-text { font-size: 13px; color: var(--accent-text); font-weight: 500; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    #modal-edit h2 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
+    .edit-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .edit-group label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+    .edit-group input, .edit-group textarea { padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; resize: vertical; }
+
+    /* Sides popup */
+    .sides-popup { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; max-width: 500px; width: 100%; box-shadow: var(--shadow-md); position: relative; }
+    .sides-popup h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .sides-popup p { font-size: 13px; color: var(--text-muted); margin-bottom: 1rem; }
+    .side-suggestion { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .side-suggestion label { display: flex; align-items: center; gap: 10px; cursor: pointer; width: 100%; font-size: 13px; }
+    .side-suggestion input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--accent); flex-shrink: 0; }
+    .side-suggestion-text { line-height: 1.4; }
+    .side-dinner { font-size: 11px; color: var(--text-muted); }
+    .side-name { font-weight: 500; }
+
+    /* Changelog popup */
+    .changelog-entry { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+    .changelog-entry:last-child { margin-bottom: 0; }
+    .changelog-date { font-size: 11px; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+
+    .stale-banner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 600; padding: 10px 16px; background: #fff4e0; color: #5c3b00; border-bottom: 1px solid #f0d9a8; font-size: 13px; text-align: center; }
+    .stale-banner.show { display: block; }
+    .stale-banner button { margin-left: 10px; padding: 4px 12px; border-radius: 6px; border: 1px solid #c99a3c; background: #fff; color: inherit; font: inherit; cursor: pointer; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text); color: var(--surface); padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transform: translateY(6px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .hint { font-size: 12px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 1rem; line-height: 1.6; }
+    .privacy-card { max-width: 680px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); }
+    .privacy-card h2 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .privacy-card p { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
+    .privacy-toggle { display: flex; align-items: flex-start; gap: 10px; padding: 12px; margin: 1rem 0; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); cursor: pointer; }
+    .privacy-toggle input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; }
+    .privacy-toggle strong { display: block; font-size: 13px; margin-bottom: 3px; }
+    .privacy-toggle span { display: block; font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .privacy-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 1rem 0; }
+    .privacy-customise { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .privacy-customise summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 600; }
+    .privacy-customise[open] summary { margin-bottom: .25rem; }
+    .privacy-status { min-height: 1.4em; font-size: 12px; color: var(--text-muted); }
+    .privacy-list { padding-left: 1.25rem; margin: 8px 0 0; color: var(--text-muted); font-size: 13px; line-height: 1.7; }
+    .telemetry-prompt h2 { font-size: 16px; font-weight: 600; margin-bottom: 8px; padding-right: 2rem; }
+    .telemetry-prompt p { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
+    .privacy-prompt-note { font-size: 12px !important; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
+    .telemetry-prompt .btn-row { margin-top: 1.25rem; gap: 8px; flex-wrap: wrap; }
+
+    /* Stats Dashboard */
+    .sd-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); margin-bottom: 1.25rem; }
+    .sd-section-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .sd-headline { font-size: 15px; line-height: 1.6; color: var(--text); }
+    .sd-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .sd-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; }
+    .sd-card-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .sd-lb-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .sd-lb-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .sd-lb-rank { font-size: 11px; font-weight: 600; color: var(--text-faint); width: 18px; flex-shrink: 0; text-align: right; }
+    .sd-lb-name { flex: 1; font-weight: 500; }
+    .sd-lb-count { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+    .sd-bar-wrap { margin-bottom: 10px; }
+    .sd-bar-wrap:last-child { margin-bottom: 0; }
+    .sd-bar-label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+    .sd-bar-label { font-size: 12px; font-weight: 500; }
+    .sd-bar-pct { font-size: 12px; color: var(--text-muted); }
+    .sd-bar-track { background: var(--border); border-radius: 4px; height: 8px; overflow: hidden; }
+    .sd-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .sd-empty { font-size: 13px; color: var(--text-muted); padding: 1rem 0; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 1rem; }
+      nav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; justify-content: flex-start; }
+      nav::-webkit-scrollbar { display: none; }
+      nav button { flex-shrink: 0; white-space: nowrap; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      main { padding: 1.25rem 1rem; }
+      .heatmap-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .sd-two-col { grid-template-columns: 1fr; }
+    }
+
+
+    /* PDF Print Styles */
+    #pdf-page { display: none; font-family: 'DM Sans', sans-serif; color: #1a1917; }
+    .pdf-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #1a1917; }
+    .pdf-logo { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
+    .pdf-logo-dot { width: 9px; height: 9px; border-radius: 50%; background: #2d6a4f; flex-shrink: 0; }
+    .pdf-date { font-size: 11px; color: #6b6860; }
+    .pdf-weeks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .pdf-week-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #2d6a4f; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #d8f3dc; }
+    .pdf-day-row { display: flex; align-items: baseline; gap: 8px; padding: 3px 0; border-bottom: 1px dotted #e5e3dc; }
+    .pdf-day { font-size: 10px; font-weight: 600; color: #a09d96; text-transform: uppercase; letter-spacing: 0.05em; width: 28px; flex-shrink: 0; }
+    .pdf-meal { font-size: 12px; font-weight: 500; line-height: 1.3; }
+    .pdf-extras { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .pdf-extra { border-radius: 6px; padding: 6px 10px; }
+    .pdf-extra-lunch { background: #e8f4fd; }
+    .pdf-extra-dessert { background: #fdf0fb; }
+    .pdf-extra-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b6860; margin-bottom: 2px; }
+    .pdf-extra-name { font-size: 11px; font-weight: 500; }
+    .pdf-divider { border: none; border-top: 2px solid #1a1917; margin: 14px 0; }
+    .pdf-shop-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; color: #1a1917; }
+    .pdf-shop-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .pdf-shop-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b6860; margin-bottom: 6px; padding-bottom: 3px; border-bottom: 1px solid #e5e3dc; }
+    .pdf-shop-item { display: flex; align-items: center; gap: 5px; font-size: 11px; padding: 2px 0; }
+    .pdf-checkbox { width: 10px; height: 10px; border: 1.5px solid #ccc9be; border-radius: 2px; flex-shrink: 0; display: inline-block; }
+    .pdf-footer { margin-top: 14px; text-align: center; font-size: 9px; color: #a09d96; }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body > *:not(#print-wrapper) { display: none !important; }
+      #print-wrapper { display: block !important; padding: 20px; }
+      #pdf-page { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><img src="thekitchenloop.png" alt="The Kitchen Loop" style="height: 36px; width: auto;" /></div>
+  <nav>
+    <button class="active" onclick="showView('recipes')">&#127859; Recipes</button>
+    <button onclick="showView('add')">&#43; Add</button>
+    <button onclick="showView('plan')">&#128197; Plan</button>
+    <button onclick="showView('shopping')">&#128722; Shopping</button>
+    <button onclick="showView('stats')">&#128200; Stats</button>
+    <button onclick="showView('privacy')">&#128274; Privacy</button>
+    <button onclick="openCookTonight()">&#127922; Cook Tonight</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- RECIPES -->
+  <div id="view-recipes" class="view active">
+    <div class="page-header">
+      <div id="recipes-back-wrap" style="display:none"><button class="back-btn" onclick="clearRecipeFilter()">&#8592; Back</button></div>
+      <div class="page-header-text">
+        <h1 id="recipes-title">My Recipes</h1>
+        <p id="recipes-subtitle">Click any recipe to view, edit or log a cook</p>
+      </div>
+    </div>
+    <div class="stats-row" id="stats-row"></div>
+    <div id="heatmap-container" style="overflow-x:auto;margin-bottom:1.25rem;"></div>
+    <div class="toolbar" id="recipes-toolbar">
+      <input type="text" id="search-input" placeholder="Search by name or ingredient..." oninput="renderRecipes()" />
+      <select id="cat-filter" onchange="renderRecipes()">
+        <option value="">All categories</option>
+        <option value="Dinner">Dinner</option>
+        <option value="Pasta">Pasta</option>
+        <option value="Dessert">Dessert</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Side">Side</option>
+        <option value="Dressing">Dressing</option>
+      </select>
+      <select id="sort-filter" onchange="renderRecipes()">
+        <option value="name">Sort: A–Z</option>
+        <option value="cooks">Sort: Most cooked</option>
+        <option value="recent">Sort: Recently cooked</option>
+      </select>
+    </div>
+    <div class="recipe-grid" id="recipe-grid"></div>
+  </div>
+
+  <!-- COOK LOG -->
+  <div id="view-cooklog" class="view">
+    <div class="page-header">
+      <button class="back-btn" onclick="showView('recipes')">&#8592; Back</button>
+      <div class="page-header-text">
+        <h1>Cook Log</h1>
+        <p>Your cooking history — hover over the count to see dates, use + / − to adjust</p>
+      </div>
+    </div>
+    <div id="cooklog-container"></div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div id="view-categories" class="view">
+    <div class="page-header">
+      <button class="back-btn" onclick="showView('recipes')">&#8592; Back</button>
+      <div class="page-header-text">
+        <h1>Categories</h1>
+        <p>Click a category to browse its recipes</p>
+      </div>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+  </div>
+
+  <!-- ADD -->
+  <div id="view-add" class="view">
+    <div class="page-header"><div class="page-header-text"><h1>Add a Recipe</h1><p>Name and ingredients are required</p></div></div>
+    <div class="form-card">
+      <div class="form-grid">
+        <div class="form-group full"><label>Recipe name *</label><input type="text" id="new-name" placeholder="e.g. Vegetable Lasagne" /></div>
+        <div class="form-group full">
+          <label>Categories (pick all that apply)</label>
+          <div class="cat-picker" id="new-cat-picker">
+            <span class="cat-pill" data-cat="Dinner" onclick="toggleCat(this)">Dinner</span>
+            <span class="cat-pill" data-cat="Pasta" onclick="toggleCat(this)">Pasta</span>
+            <span class="cat-pill" data-cat="Dessert" onclick="toggleCat(this)">Dessert</span>
+            <span class="cat-pill" data-cat="Lunch" onclick="toggleCat(this)">Lunch</span>
+            <span class="cat-pill" data-cat="Breakfast" onclick="toggleCat(this)">Breakfast</span>
+            <span class="cat-pill" data-cat="Side" onclick="toggleCat(this)">Side</span>
+            <span class="cat-pill" data-cat="Dressing" onclick="toggleCat(this)">Dressing</span>
+          </div>
+        </div>
+        <div class="form-group full"><label>Ingredients (comma separated) *</label><textarea id="new-ingredients" rows="3" placeholder="e.g. Chicken Breast, Garlic, Butter, Cream..."></textarea></div>
+        <div class="form-group"><label>Instagram post link</label><input type="text" id="new-instagram-link" placeholder="https://..." /></div>
+        <div class="form-group"><label>TikTok post link</label><input type="text" id="new-tiktok-link" placeholder="https://..." /></div>
+        <div class="form-group"><label>Threads post link</label><input type="text" id="new-threads-link" placeholder="https://..." /></div>
+        <div class="form-group"><label>Notes</label><input type="text" id="new-notes" placeholder="Tips or reminders..." /></div>
+        <div class="form-group full"><label>Pairs with (for Sides — enter recipe name exactly, comma separated)</label><input type="text" id="new-pairswith" placeholder="e.g. Weeknight Beef Chilli, Red Lentil Dhal" /></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+        <button class="btn btn-primary" onclick="addRecipe()">Save recipe</button>
+      </div>
+    </div>
+    <div class="hint">&#128161; Paste an Instagram link into Claude and ask it to extract the recipe — then copy the details here.</div>
+  </div>
+
+  <!-- PLAN -->
+  <div id="view-plan" class="view">
+    <div class="page-header"><div class="page-header-text"><h1>Fortnightly Plan</h1><p>7 dinners per week, plus 1 lunch rotation and 1 dessert</p></div></div>
+    <div class="plan-tabs">
+      <button id="plan-tab-active" class="plan-tab active" onclick="switchPlanTab('active')">Active</button>
+      <button id="plan-tab-history" class="plan-tab" onclick="switchPlanTab('history')">History</button>
+      <button id="plan-tab-custom" class="plan-tab" onclick="switchPlanTab('custom')">Custom List</button>
+    </div>
+    <div id="plan-active-content">
+      <div class="plan-actions">
+        <button class="btn btn-primary" onclick="generatePlan()">&#10024; Auto-generate</button>
+        <button class="btn btn-secondary" onclick="savePlanAndShop()">&#8594; Build shopping list</button>
+        <button class="btn btn-secondary" onclick="archivePlan()">&#128230; Archive plan</button>
+        <button class="btn btn-danger" onclick="clearPlan()">Clear plan</button>
+      </div>
+      <div id="plan-container"></div>
+    </div>
+    <div id="plan-history-content" style="display:none">
+      <div id="plan-history-container"></div>
+    </div>
+    <div id="plan-custom-content" style="display:none">
+      <div class="plan-actions">
+        <button class="btn btn-secondary" onclick="buildCustomShoppingList()">&#8594; Build shopping list</button>
+        <button class="btn btn-secondary" onclick="archiveCustomList()">&#128230; Archive list</button>
+        <button class="btn btn-danger" onclick="clearCustomList()">Clear list</button>
+      </div>
+      <div class="custom-list-search-wrap">
+        <input type="text" id="custom-list-search" placeholder="Search by name or ingredient..." oninput="renderCustomListSearch()" onfocus="renderCustomListSearch()" autocomplete="off" />
+        <div id="custom-list-search-results" class="custom-list-search-results"></div>
+      </div>
+      <div id="custom-list-chips" class="custom-list-chips"></div>
+    </div>
+  </div>
+
+  <!-- SHOPPING -->
+  <div id="view-shopping" class="view">
+    <div class="page-header">
+      <div class="page-header-text"><h1>Shopping List</h1><p>Tick off what you have — then export a clean PDF for the fridge</p></div>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-secondary" onclick="copyShoppingList()">&#128203; Copy list</button>
+        <button id="shopping-share-btn" class="btn btn-secondary" onclick="shareShoppingList()" style="display:none;">&#128228; Share</button>
+        <button class="btn btn-primary" onclick="exportPDF(currentShoppingTab)">&#128196; Export PDF</button>
+      </div>
+    </div>
+    <div class="plan-tabs">
+      <button id="shopping-tab-plan" class="plan-tab active" onclick="switchShoppingTab('plan')">Plan</button>
+      <button id="shopping-tab-custom" class="plan-tab" onclick="switchShoppingTab('custom')">Custom List</button>
+    </div>
+    <div id="shopping-container"></div>
+  </div>
+
+  <!-- STATS DASHBOARD -->
+  <div id="view-stats" class="view">
+    <div class="page-header"><div class="page-header-text"><h1>Stats</h1><p>Your cooking habits at a glance</p></div></div>
+    <div id="sd-headline-wrap"></div>
+    <div id="sd-trend-wrap"></div>
+    <div id="sd-leaderboards-wrap"></div>
+    <div id="sd-profile-wrap"></div>
+  </div>
+
+  <!-- PRIVACY -->
+  <div id="view-privacy" class="view">
+    <div class="page-header"><div class="page-header-text"><h1>Privacy</h1><p>Manage your anonymous insights choices</p></div></div>
+    <div class="privacy-card">
+      <h2>Keep the app local by default</h2>
+      <p>Your recipes, meal plans, cooking history and shopping lists never leave this computer. Anonymous insights are optional and do not affect any app feature.</p>
+      <div class="privacy-actions">
+        <button class="btn btn-primary" type="button" onclick="enableAllTelemetryFromPrivacy()">Enable all anonymous insights</button>
+        <button class="btn btn-secondary" type="button" onclick="disableAllTelemetryFromPrivacy()">Disable all</button>
+      </div>
+      <p class="privacy-status" id="telemetry-status"></p>
+      <details class="privacy-customise" id="telemetry-customise">
+        <summary>Customise individual settings</summary>
+        <label class="privacy-toggle" for="telemetry-opt-in">
+          <input type="checkbox" id="telemetry-opt-in" onchange="setTelemetryEnabled(this.checked)" />
+          <span><strong>Share anonymous adoption metrics</strong><span>Send one install event and at most one heartbeat per month. We collect only a random installation ID, app version, broad platform family and event type. Approximate country-level reach is a separate renewed choice below. We do not collect recipes, names, email addresses, paths or usage history.</span></span>
+        </label>
+        <label class="privacy-toggle" for="telemetry-usage-opt-in">
+          <input type="checkbox" id="telemetry-usage-opt-in" onchange="setTelemetryUsageEnabled(this.checked)" />
+          <span><strong>Share anonymous product-usage counts</strong><span>Requires a separate explicit consent. We count successful recipe creations, successful recipe edits and activated recipe social/cooking-method links. We never send recipe content, identifiers, ingredients, names, URLs, paths, identities or browsing history.</span></span>
+        </label>
+        <label class="privacy-toggle" for="telemetry-country-opt-in">
+          <input type="checkbox" id="telemetry-country-opt-in" onchange="setTelemetryCountryEnabled(this.checked)" />
+          <span><strong>Include approximate country in adoption metrics</strong><span>Requires renewed consent for existing installations. The Worker uses Cloudflare's approximate country signal only; it stores one country-level attribution per installation and aggregate country counts. No IP address, GPS, coordinates, city or location history is collected.</span></span>
+        </label>
+      </details>
+      <p>Adoption, country and usage consent are independent and can be revoked at any time. A browser reset or copied installation may be counted separately. Usage reporting uses Europe/Malta calendar days, ISO weeks and calendar months.</p>
+      <ul class="privacy-list"><li>Off by default</li><li>Easy to disable at any time</li><li>App continues working if the network is unavailable</li></ul>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="recipe-modal" onclick="handleModalClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div id="modal-view">
+      <h2 id="mv-title"></h2>
+      <div class="origin-label" id="mv-origin"><img class="origin-icon" src="kitchen-loop-original.png" alt="" />The Kitchen Loop Original</div>
+      <div class="tags" id="mv-tags"></div>
+      <div class="cook-banner">
+        <span class="cook-banner-text" id="mv-cook-count">Never cooked</span>
+        <button class="btn btn-cook" id="btn-cooked-it" onclick="logCook()">&#10003; Cooked it!</button>
+        <div id="cook-confirm-prompt" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:13px;font-weight:500;color:var(--accent-text)">Cook this today?</span>
+          <button class="btn btn-cook" onclick="confirmCookToday()">Yes</button>
+          <button class="btn btn-secondary" onclick="showCookDatePicker()">Pick a date</button>
+        </div>
+        <div id="cook-date-picker-wrap" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+          <input type="date" id="cook-date-input" style="font-size:13px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;background:var(--surface);">
+          <button class="btn btn-cook" onclick="confirmCookDate()">Confirm</button>
+        </div>
+      </div>
+      <div class="modal-sec-label">Ingredients</div>
+      <p class="modal-ingredients" id="mv-ingredients"></p>
+      <div id="mv-notes-wrap" style="display:none"><div class="modal-sec-label">Method &amp; notes</div><p class="modal-notes-box" id="mv-notes"></p></div>
+      <div class="method-link-wrap" id="mv-method" style="display:none">
+        <a id="mv-method-link" class="btn btn-primary" target="_blank" rel="noopener noreferrer">View cooking method</a>
+        <p class="method-note" id="mv-method-note"></p>
+      </div>
+      <div class="modal-actions">
+        <a id="mv-link-instagram" target="_blank" rel="noopener noreferrer" title="View on Instagram" class="btn btn-icon" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a id="mv-link-tiktok" target="_blank" rel="noopener noreferrer" title="View on TikTok" class="btn btn-icon" style="display:none">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 1.9 1.6 3.3 3.5 3.6v2.6a6.7 6.7 0 0 1-3.5-1v6.6a5.7 5.7 0 1 1-5.7-5.7c.3 0 .6 0 .9.1v2.7a3 3 0 1 0 2.1 2.9V3h2.7z"/></svg>
+        </a>
+        <a id="mv-link-threads" target="_blank" rel="noopener noreferrer" title="View on Threads" class="btn btn-icon" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3.5c-3 1-4.5 3.7-4.5 7 0 5 3 9.5 8 9.9 4.5.3 7.7-2.4 8-6 .2-2.6-1.1-4.3-3.2-4.3-1.7 0-2.7 1-2.9 2.6-.1 1.1 0 2.3-.1 3.4-.1 1.7-1 2.8-2.6 2.8-1.5 0-2.4-1-2.4-2.3 0-1.5 1.2-2.3 3-2.4"/></svg>
+        </a>
+        <button class="btn btn-secondary" onclick="switchToEdit()">&#9998; Edit</button>
+        <button class="btn btn-danger" id="btn-delete-recipe" onclick="deleteCurrentRecipe()">Delete</button>
+      </div>
+    </div>
+    <div id="modal-edit" style="display:none">
+      <h2>Edit recipe</h2>
+      <div id="edit-canonical-fields">
+        <div class="edit-group"><label>Recipe name</label><input type="text" id="edit-name" /></div>
+        <div class="edit-group">
+          <label>Categories</label>
+          <div class="cat-picker" id="edit-cat-picker">
+            <span class="cat-pill" data-cat="Dinner" onclick="toggleCat(this)">Dinner</span>
+            <span class="cat-pill" data-cat="Pasta" onclick="toggleCat(this)">Pasta</span>
+            <span class="cat-pill" data-cat="Dessert" onclick="toggleCat(this)">Dessert</span>
+            <span class="cat-pill" data-cat="Lunch" onclick="toggleCat(this)">Lunch</span>
+            <span class="cat-pill" data-cat="Breakfast" onclick="toggleCat(this)">Breakfast</span>
+            <span class="cat-pill" data-cat="Side" onclick="toggleCat(this)">Side</span>
+            <span class="cat-pill" data-cat="Dressing" onclick="toggleCat(this)">Dressing</span>
+          </div>
+        </div>
+        <div class="edit-group"><label>Ingredients</label><textarea id="edit-ingredients" rows="3"></textarea></div>
+        <div class="edit-group"><label>Instagram post link</label><input type="text" id="edit-instagram-link" placeholder="https://..." /></div>
+        <div class="edit-group"><label>TikTok post link</label><input type="text" id="edit-tiktok-link" placeholder="https://..." /></div>
+        <div class="edit-group"><label>Threads post link</label><input type="text" id="edit-threads-link" placeholder="https://..." /></div>
+        <div class="edit-group"><label>Pairs with (for Sides — enter recipe name exactly, comma separated)</label><input type="text" id="edit-pairswith" placeholder="e.g. Weeknight Beef Chilli, Red Lentil Dhal" /></div>
+      </div>
+      <div class="edit-group"><label id="edit-notes-label">Notes</label><input type="text" id="edit-notes" /></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="switchToView()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEdit()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sides-modal" onclick="handleSidesModalClick(event)">
+  <div class="sides-popup">
+    <h2>&#127869;&#65039; Suggested Sides</h2>
+    <p>Based on your dinner plan — would you like to prep any of these sides?</p>
+    <div id="sides-suggestions"></div>
+    <div class="btn-row" style="justify-content:space-between; margin-top:1rem;">
+      <button class="btn btn-danger" onclick="closeSidesModal()">Skip</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-secondary" onclick="addSelectedSides()">Add selected</button>
+        <button class="btn btn-primary" onclick="addAllSides()">Add all</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cook-tonight-modal" onclick="handleCookTonightClick(event)">
+  <div class="sides-popup" style="max-width:480px;">
+    <button class="modal-close" onclick="closeCookTonightModal()">&#215;</button>
+    <h2 style="padding-right:2rem;">&#127922; Cook Tonight</h2>
+    <p id="ct-pool-info" style="font-size:12px;color:var(--text-faint);margin-bottom:1rem;"></p>
+    <div id="ct-recipe-card" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem;">
+      <div class="tags" id="ct-tags" style="margin-bottom:8px;"></div>
+      <h3 id="ct-name" style="font-size:16px;font-weight:600;margin-bottom:8px;"></h3>
+      <p id="ct-ingredients" style="font-size:12px;color:var(--text-muted);line-height:1.6;margin-bottom:8px;"></p>
+      <p id="ct-cook-count" style="font-size:12px;color:var(--text-faint);"></p>
+    </div>
+    <div class="btn-row" style="justify-content:space-between;margin-top:0;">
+      <button class="btn btn-secondary" onclick="rerollCookTonight()">&#127922; Re-roll</button>
+      <button class="btn btn-cook" onclick="cookTonightGo()" style="font-weight:600;">&#10003; Let&#39;s cook this</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="changelog-modal" onclick="handleChangelogModalClick(event)">
+  <div class="sides-popup" style="max-width:460px;">
+    <h2>&#10024; What's new</h2>
+    <div id="changelog-entries"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="closeChangelogModal()">Got it</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="telemetry-prompt-modal" role="dialog" aria-modal="true" aria-labelledby="telemetry-prompt-title">
+  <div class="sides-popup telemetry-prompt" style="max-width:480px;">
+    <h2 id="telemetry-prompt-title">Help improve The Kitchen Loop</h2>
+    <p>Share anonymous insights if you choose. All three categories are optional and stay off until you decide:</p>
+    <ul class="privacy-list">
+      <li><strong>Adoption:</strong> one install event and at most one heartbeat per month.</li>
+      <li><strong>Product usage:</strong> counts of successful recipe creations, edits and activated social or cooking-method links.</li>
+      <li><strong>Approximate country:</strong> one country-level reach count from Cloudflare; no IP address, GPS, coordinates, city or location history.</li>
+    </ul>
+    <p class="privacy-prompt-note">No recipes, meal plans, names, email addresses, file paths, URLs, identities or browsing history are collected. Insights are aggregate-only, optional and non-blocking; the app works fully offline.</p>
+    <div class="btn-row" style="justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="rejectAllTelemetry()">No thanks</button>
+      <button class="btn btn-secondary" onclick="customiseTelemetry()">Customise</button>
+      <button class="btn btn-primary" onclick="enableAllTelemetry()">Enable all anonymous insights</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-wrapper" id="print-wrapper" style="display:none;">
+  <div id="pdf-page"></div>
+</div>
+
+<div class="stale-banner" id="stale-banner" role="alert">
+  Your recipes were changed in another tab or window, so this page has stopped saving.
+  <button onclick="location.reload()">Reload</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Same-origin API served by server.js — one household per installation, no login.
+const API='/api';
+const JSON_HEADERS={'Content-Type':'application/json'};
+
+// Escapes text for safe insertion into HTML built with template strings. Every recipe
+// field, plan entry and ingredient is user-editable, so it must pass through this before
+// reaching innerHTML.
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+// Only http(s) links are ever made clickable; anything else (e.g. javascript:) is dropped.
+function safeUrl(u){
+  try{ const x=new URL(u); return (x.protocol==='https:'||x.protocol==='http:')?x.href:''; }catch(e){ return ''; }
+}
+// Newest first. `version` is just an incrementing "have you seen up to this number" counter,
+// not semver — add new entries here, nothing else needs to change to announce a feature.
+const CHANGELOG = [
+  { version: 1, date: '2026-10-22', text: "Welcome to The Kitchen Loop Community Edition! You start with 15 original recipes from The Kitchen Loop — each links to its step-by-step method on TikTok, Instagram and Threads — plus 3 sample recipes with written methods. Edit or delete any of them, add your own, then generate a fortnightly plan and shopping list. Your data is stored only on this computer." }
+];
+
+const APP_VERSION = '0.1.0';
+const TELEMETRY_SCHEMA = 2;
+const TELEMETRY_COUNTRY_SCHEMA = 3;
+const TELEMETRY_CONSENT_VERSION = 2;
+const TELEMETRY_COUNTRY_CONSENT_VERSION = 3;
+const TELEMETRY_ENDPOINT = 'https://kitchen-loop-telemetry.costa911.workers.dev';
+const TELEMETRY_STORAGE_KEY = 'kitchen_loop_telemetry_v2';
+const TELEMETRY_LEGACY_STORAGE_KEY = 'kitchen_loop_telemetry_v1';
+const TELEMETRY_PROMPT_KEY = 'kitchen_loop_telemetry_prompt_v2';
+const TELEMETRY_PROMPT_SNOOZE_MS = 7*24*60*60*1000;
+
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const LUNCH_ROTATIONS=['Hummus & veg wraps','Cheese & pickle sandwiches','Tomato soup & crusty bread','Egg mayo on toast','Leftovers from last night'];
+const CAT_ICONS={'Dinner':'🍽️','Pasta':'🍝','Dessert':'🍰','Lunch':'🥗','Breakfast':'🍳','Side':'🥗','Dressing':'🥣'};
+const STAPLES=new Set(['Garlic','Onion','Olive Oil','Worcestershire Sauce','Worchestire Sauce','Milk','Any Mustard','Mustard','Soy Sauce','Black Pepper','Black Peppercorn','Cardamom','Cinnamon','Cloves','Aniseed','Fennel Seeds','Fish Sauce','Chilli','Grated Cheese','Pasta','Baking Powder','Cacao','Canned Chickpeas','Salt','Frozen Corn','Frozen Green Beans','Frozen Peas','Peanut Butter','Sesame Oil','Sesame Seeds','Sriracha','Siracha','Egg Noodles','Anchovies','Bay Leaves','Bay Leaf','Canned Tomatoes','Passata','Tomato Passata','Chicken Stock','Beef Stock','Vegetable Stock','Fish Stock','Cumin','Kunserva','Polenta','Red Wine','Eggs','Tahini','Mayonnaise','Ketchup','BBQ Sauce','Paprika Sweet','Paprika Smokey','Cous Cous','Canned Butter Beans','Canned Kidney Beans','Canned Tuna','Curry Powder','Panko Breadcrumbs','Balsamic Vinegar','Flour','Cornflour','Greek Yogurt','Nutmeg','Coconut Milk','Canned Coconut Milk','Dry Lentils','Turmeric','Garam Masala','Green Pesto','Red Pesto','Water','Rice Wine Vinegar','Baking Soda']);
+const FRESH=['fresh','lemon','lime','tomato','parsley','coriander','basil','mint','ginger','spring onion','cucumber','lettuce','carrot','celery','leek','potato','courgette','aubergine','broccoli','cauliflower','kale','spinach','mushroom','pepper','apple','bread','butter','cream','fish','chicken','beef','lamb','pork','sausage','salmon','white fish','mince','chorizo','pancetta','gammon','bacon','rotisserie','ricotta','feta','cheddar','parmesan','kefalyori','provolone','hard cheese','dumplings','frozen pepper','frozen spinach','frozen mushroom'];
+
+let recipes=[], plan=[], planHistory=[], shoppingChecked={}, activeModalId=null, recipeFilter=null, planTickIdx=null;
+let customListRecipeIds=[], customListShoppingChecked={}, customListCreatedAt=null;
+let currentShoppingTab='plan';
+let lastSeenChangelogVersion=0;
+let _saveTimer=null;
+let _customListSaveTimer=null;
+let _dataLoadFailed=false;
+
+function readTelemetryState(key){
+  try{ return JSON.parse(localStorage.getItem(key)||'null'); }
+  catch(e){ return null; }
+}
+
+function telemetryState(){
+  const current=readTelemetryState(TELEMETRY_STORAGE_KEY);
+  if(current&&typeof current==='object') return {...current,usageEnabled:Boolean(current.usageEnabled&&current.consentVersion===TELEMETRY_CONSENT_VERSION),countryEnabled:Boolean(current.countryEnabled&&current.countryConsentVersion===TELEMETRY_COUNTRY_CONSENT_VERSION)};
+  const legacy=readTelemetryState(TELEMETRY_LEGACY_STORAGE_KEY);
+  if(legacy&&typeof legacy==='object') return {...legacy,consentVersion:1,usageEnabled:false,countryEnabled:false};
+  return {enabled:false,usageEnabled:false,countryEnabled:false,consentVersion:TELEMETRY_CONSENT_VERSION};
+}
+
+function saveTelemetryState(state){ try{ localStorage.setItem(TELEMETRY_STORAGE_KEY, JSON.stringify(state)); localStorage.removeItem(TELEMETRY_LEGACY_STORAGE_KEY); }catch(e){} }
+
+function telemetryPromptRecord(){
+  try{ return JSON.parse(localStorage.getItem(TELEMETRY_PROMPT_KEY)||'null') || {}; }
+  catch(e){ return {dismissed:true}; }
+}
+
+function saveTelemetryPromptRecord(record){ try{ localStorage.setItem(TELEMETRY_PROMPT_KEY, JSON.stringify(record)); }catch(e){} }
+
+function maybeShowTelemetryPrompt(){
+  const state=telemetryState();
+  if(state.enabled) return;
+  const record=telemetryPromptRecord();
+  if(record.decision==='off'||record.decision==='customised') return;
+  if(record.decision==='snoozed' && Number(record.remindAt)>Date.now()) return;
+  document.getElementById('telemetry-prompt-modal').classList.add('open');
+}
+
+function closeTelemetryPrompt(record){
+  saveTelemetryPromptRecord(record);
+  document.getElementById('telemetry-prompt-modal').classList.remove('open');
+}
+
+function rejectAllTelemetry(){
+  closeTelemetryPrompt({decision:'off'});
+  void setTelemetryEnabled(false);
+}
+
+function keepTelemetryOff(){ rejectAllTelemetry(); }
+
+function customiseTelemetry(){
+  closeTelemetryPrompt({decision:'customised'});
+  if(typeof showView==='function') showView('privacy');
+}
+
+function remindTelemetryNextWeek(){
+  closeTelemetryPrompt({decision:'snoozed',remindAt:Date.now()+TELEMETRY_PROMPT_SNOOZE_MS});
+}
+
+async function enableAllTelemetry(){
+  closeTelemetryPrompt({decision:'enabled'});
+  const state=telemetryState();
+  state.usageEnabled=true;
+  state.consentVersion=TELEMETRY_CONSENT_VERSION;
+  state.countryEnabled=true;
+  state.countryConsentVersion=TELEMETRY_COUNTRY_CONSENT_VERSION;
+  saveTelemetryState(state);
+  await setTelemetryEnabled(true);
+}
+
+async function acceptTelemetryPrompt(){ await enableAllTelemetry(); }
+
+function newInstallationId(){
+  if(crypto.randomUUID) return crypto.randomUUID();
+  const bytes=new Uint8Array(16); crypto.getRandomValues(bytes);
+  bytes[6]=(bytes[6]&15)|64; bytes[8]=(bytes[8]&63)|128;
+  return [...bytes].map((b,i)=>[4,6,8,10].includes(i)?'-'+b.toString(16).padStart(2,'0'):b.toString(16).padStart(2,'0')).join('');
+}
+
+function platformFamily(){
+  const p=navigator.userAgentData?.platform||navigator.platform||'';
+  const x=p.toLowerCase();
+  if(x.includes('win')) return 'windows';
+  if(x.includes('mac')) return 'macos';
+  if(x.includes('linux')) return 'linux';
+  return 'other';
+}
+
+async function sendTelemetry(event){
+  const state=telemetryState();
+  const usageEvent=['recipe_created','recipe_updated','social_clicked'].includes(event);
+  if(!['install','heartbeat','recipe_created','recipe_updated','social_clicked'].includes(event)||!state.installationId||!TELEMETRY_ENDPOINT) return false;
+  if(usageEvent ? (!state.usageEnabled||state.consentVersion!==TELEMETRY_CONSENT_VERSION) : !state.enabled) return false;
+  const countryConsent=Boolean(state.countryEnabled&&state.countryConsentVersion===TELEMETRY_COUNTRY_CONSENT_VERSION);
+  const body={event,installation_id:state.installationId,app_version:APP_VERSION,platform:platformFamily(),telemetry_schema:countryConsent?TELEMETRY_COUNTRY_SCHEMA:TELEMETRY_SCHEMA};
+  if(countryConsent) body.country_consent_version=TELEMETRY_COUNTRY_CONSENT_VERSION;
+  try{
+    const res=await fetch(`${TELEMETRY_ENDPOINT}/v1/events`,{
+      method:'POST', mode:'cors', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    return res.ok;
+  }catch(e){ return false; }
+}
+
+async function sendDueTelemetry(){
+  const state=telemetryState();
+  if(!state.enabled||!state.installationId) return null;
+  if(!state.installSent){
+    if(await sendTelemetry('install')){ state.installSent=true; saveTelemetryState(state); return 'install'; }
+    return null;
+  }
+  const month=new Date().toISOString().slice(0,7);
+  if(state.lastHeartbeatMonth!==month && await sendTelemetry('heartbeat')){ state.lastHeartbeatMonth=month; saveTelemetryState(state); return 'heartbeat'; }
+  return null;
+}
+
+function renderTelemetrySettings(){
+  const state=telemetryState();
+  const checkbox=document.getElementById('telemetry-opt-in');
+  const usageCheckbox=document.getElementById('telemetry-usage-opt-in');
+  const countryCheckbox=document.getElementById('telemetry-country-opt-in');
+  const status=document.getElementById('telemetry-status');
+  if(!checkbox||!usageCheckbox||!countryCheckbox||!status) return;
+  checkbox.checked=Boolean(state.enabled);
+  usageCheckbox.checked=Boolean(state.enabled&&state.usageEnabled&&state.consentVersion===TELEMETRY_CONSENT_VERSION);
+  countryCheckbox.checked=Boolean(state.enabled&&state.countryEnabled&&state.countryConsentVersion===TELEMETRY_COUNTRY_CONSENT_VERSION);
+  usageCheckbox.disabled=!state.enabled;
+  countryCheckbox.disabled=!state.enabled;
+  status.textContent=state.enabled
+    ? ('Adoption is enabled. '+(usageCheckbox.checked?'Product usage is enabled. ':'Product usage is off. ')+(countryCheckbox.checked?'Approximate country reporting is enabled.':'Approximate country reporting is off.'))
+    : 'All anonymous insights are off. No telemetry is sent.';
+}
+
+async function setTelemetryEnabled(enabled){
+  const state=telemetryState();
+  if(!enabled){
+    saveTelemetryState({enabled:false,usageEnabled:false,countryEnabled:false,consentVersion:TELEMETRY_CONSENT_VERSION,countryConsentVersion:TELEMETRY_COUNTRY_CONSENT_VERSION});
+    renderTelemetrySettings();
+    return;
+  }
+  if(!state.installationId) state.installationId=newInstallationId();
+  state.enabled=true;
+  saveTelemetryState(state);
+  renderTelemetrySettings();
+  const sentEvent=await sendDueTelemetry();
+  document.getElementById('telemetry-status').textContent=sentEvent||state.installSent?'Anonymous adoption metrics are enabled.':'Enabled, but the first event could not be sent. The app will keep working offline and retry later.';
+}
+
+function setTelemetryUsageEnabled(enabled){
+  const state=telemetryState();
+  state.consentVersion=TELEMETRY_CONSENT_VERSION;
+  state.usageEnabled=Boolean(enabled&&state.enabled);
+  saveTelemetryState(state);
+  renderTelemetrySettings();
+}
+
+async function enableAllTelemetryFromPrivacy(){ await enableAllTelemetry(); }
+
+async function disableAllTelemetryFromPrivacy(){
+  closeTelemetryPrompt({decision:'off'});
+  await setTelemetryEnabled(false);
+}
+
+function setTelemetryCountryEnabled(enabled){
+  const state=telemetryState();
+  state.countryConsentVersion=TELEMETRY_COUNTRY_CONSENT_VERSION;
+  state.countryEnabled=Boolean(enabled&&state.enabled);
+  saveTelemetryState(state);
+  renderTelemetrySettings();
+  if(state.countryEnabled) void (async()=>{
+    const event=state.installSent?'heartbeat':'install';
+    if(!await sendTelemetry(event)) return;
+    if(event==='install') state.installSent=true;
+    else state.lastHeartbeatMonth=new Date().toISOString().slice(0,7);
+    saveTelemetryState(state);
+  })();
+}
+
+function normaliseRecipe(r){ return { ...r, cookDates:r.cookDates||[], pairsWith:r.pairsWith||'', notes:r.notes||'' }; }
+
+async function loadData(){
+  try{
+    const res=await fetch(`${API}/data`);
+    if(!res.ok){
+      console.error('loadData: GET /data failed', res.status);
+      _dataLoadFailed=true;
+      showToast('Failed to load data — is the server running?');
+      renderAll();
+      maybeShowTelemetryPrompt();
+      return;
+    }
+    const d=await res.json();
+    _revision=d.revision;
+    recipes=(d.recipes||[]).map(normaliseRecipe);
+    plan=d.plan||[];
+    plan.forEach(p=>{if(p.cooked===undefined)p.cooked=false;if(p.cookedDate===undefined)p.cookedDate=null;});
+    planHistory=d.planHistory||[];
+    shoppingChecked=d.shoppingChecked||{};
+    customListRecipeIds=(d.customList&&d.customList.recipeIds)||[];
+    customListShoppingChecked=(d.customList&&d.customList.shoppingChecked)||{};
+    customListCreatedAt=(d.customList&&d.customList.createdAt)||null;
+    lastSeenChangelogVersion=d.lastSeenChangelogVersion||0;
+    _dataLoadFailed=false;
+  }catch(e){
+    console.error('loadData: fetch threw', e);
+    _dataLoadFailed=true;
+    recipes=[]; plan=[]; shoppingChecked={};
+    customListRecipeIds=[]; customListShoppingChecked={}; customListCreatedAt=null;
+    lastSeenChangelogVersion=0;
+    showToast('Could not reach the server — is it running?');
+    maybeShowTelemetryPrompt();
+  }
+  renderAll();
+  if(!_dataLoadFailed) checkForChangelog();
+}
+
+// Strips fields that only exist in the browser (e.g. the cached protein classification)
+// before a recipe is sent to the server, which accepts known fields only.
+function serialiseRecipes(recipesArr){
+  return recipesArr.map(({proteinCategory, ...rest})=>rest);
+}
+
+// Writes are sent one at a time and each quotes the revision this page last saw. If the
+// server's data has moved on (another tab or window saved meanwhile) it answers 409; the
+// page then stops saving and asks for a reload, instead of overwriting the newer data.
+let _revision=0;
+let _stale=false;
+let _writeQueue=Promise.resolve();
+function apiWrite(path, method, body){
+  const run=_writeQueue.then(async()=>{
+    if(_stale) throw new Error('reload the page to continue');
+    const res=await fetch(`${API}${path}`,{method,headers:JSON_HEADERS,body:JSON.stringify({...(body||{}),baseRevision:_revision})});
+    let data={};
+    try{ data=await res.json(); }catch(e){}
+    if(res.status===409){ _stale=true; document.getElementById('stale-banner').classList.add('show'); }
+    if(!res.ok) throw new Error(data.error||`HTTP ${res.status}`);
+    _revision=data.revision;
+    return data;
+  });
+  _writeQueue=run.catch(()=>{});
+  return run;
+}
+
+// Immediate (non-debounced) save used for explicit, one-shot actions (delete, edit save)
+// where the UI must not commit an optimistic change until the backend confirms it.
+async function saveDataNow(recipesArr){
+  try{
+    await apiWrite('/data','PUT',{recipes:serialiseRecipes(recipesArr),plan,planHistory,shoppingChecked});
+    return true;
+  }catch(e){ showToast(`Save failed — ${e.message}`); return false; }
+}
+
+function saveData(){
+  clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(()=>{ saveDataNow(recipes); },500);
+}
+function saveR(){ saveData(); }
+function saveP(){ saveData(); }
+function saveS(){ saveData(); }
+
+// The custom list has its own endpoint, independent of the /data document the fortnightly
+// plan and its shopping ticks are saved through — so the two lists never clobber each other.
+async function saveCustomListNow(){
+  try{
+    await apiWrite('/custom-list','PUT',{recipeIds:customListRecipeIds,shoppingChecked:customListShoppingChecked});
+    return true;
+  }catch(e){ showToast(`Save failed — ${e.message}`); return false; }
+}
+function saveCustomList(){
+  clearTimeout(_customListSaveTimer);
+  _customListSaveTimer=setTimeout(()=>{ saveCustomListNow(); },500);
+}
+
+// Returns an error message if any recipe link is not an http(s) URL, otherwise ''.
+function invalidLinkMessage(...links){
+  return links.some(l=>l && !safeUrl(l)) ? 'Links must start with http:// or https://' : '';
+}
+
+function renderAll(){ renderStats(); renderRecipes(); renderCookLog(); renderCategories(); renderPlan(); renderPlanHistory(); renderCustomListChips(); renderShopping(); renderStatsDashboard(); }
+
+function getCookDaySet(){
+  const days=new Set();
+  recipes.forEach(r=>r.cookDates.forEach(d=>days.add(d.slice(0,10))));
+  return days;
+}
+
+function calcStreaks(){
+  const days=[...getCookDaySet()].sort();
+  if(!days.length) return {current:0,best:0};
+  const toMs=s=>new Date(s).getTime();
+  const DAY=86400000;
+  let best=1,run=1,cur=0;
+  for(let i=1;i<days.length;i++){
+    if(toMs(days[i])-toMs(days[i-1])===DAY){ run++; if(run>best) best=run; }
+    else run=1;
+  }
+  const today=new Date().toISOString().slice(0,10);
+  const yesterday=new Date(Date.now()-DAY).toISOString().slice(0,10);
+  const last=days[days.length-1];
+  if(last===today||last===yesterday){
+    cur=1;
+    for(let i=days.length-2;i>=0;i--){
+      if(toMs(days[i+1])-toMs(days[i])===DAY) cur++;
+      else break;
+    }
+  }
+  return {current:cur,best:Math.max(best,cur)};
+}
+
+function renderStats(){
+  const neverCooked=recipes.filter(r=>r.cookDates.length===0).length;
+  const totalCooks=recipes.reduce((a,r)=>a+(r.cookDates.length),0);
+  const cats=new Set(recipes.flatMap(r=>r.tags.split(',').map(t=>t.trim()))).size;
+  const {current,best}=calcStreaks();
+  const streakTop=current>0
+    ?`<div class="stat-num">&#128293; ${current}</div><div class="stat-label">Day Streak</div>`
+    :`<div class="stat-num" style="font-size:15px;font-weight:600;line-height:1.3;margin-bottom:4px;">Start cooking today!</div>`;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card" onclick="statClick('all')" title="View all recipes"><div class="stat-num">${recipes.length}</div><div class="stat-label">Total Recipes</div></div>
+    <div class="stat-card" onclick="statClick('nevercooked')" title="View uncooked recipes"><div class="stat-num">${neverCooked}</div><div class="stat-label">Never Cooked</div></div>
+    <div class="stat-card" onclick="showView('cooklog')" title="View cook log"><div class="stat-num">${totalCooks}</div><div class="stat-label">Total Cook Logs</div></div>
+    <div class="stat-card" onclick="showView('categories')" title="Browse categories"><div class="stat-num">${cats}</div><div class="stat-label">Categories</div></div>
+    <div class="stat-card" style="cursor:default;">${streakTop}<div class="stat-sub">Best: ${best} day${best!==1?'s':''}</div></div>`;
+  document.getElementById('heatmap-container').innerHTML=buildHeatmap();
+}
+
+function statClick(type){
+  recipeFilter=type;
+  if(type==='nevercooked'){
+    document.getElementById('recipes-title').textContent='Never Cooked';
+    document.getElementById('recipes-subtitle').textContent='Recipes you haven\'t tried yet';
+    document.getElementById('recipes-back-wrap').style.display='block';
+    document.getElementById('recipes-toolbar').style.display='none';
+  }
+  renderRecipes();
+}
+
+function clearRecipeFilter(){
+  recipeFilter=null;
+  document.getElementById('recipes-title').textContent='My Recipes';
+  document.getElementById('recipes-subtitle').textContent='Click any recipe to view, edit or log a cook';
+  document.getElementById('recipes-back-wrap').style.display='none';
+  document.getElementById('recipes-toolbar').style.display='flex';
+  renderRecipes();
+}
+
+// Recipes published by The Kitchen Loop carry origin:"kitchen-loop" in their data. The server
+// controls that marker (it can't be added from the browser), so it is safe to trust here.
+const ORIGIN_KITCHEN_LOOP='kitchen-loop';
+function isOfficial(r){ return r.origin===ORIGIN_KITCHEN_LOOP; }
+function originIconHtml(r){ return isOfficial(r)?'<img class="origin-icon" src="kitchen-loop-original.png" alt="The Kitchen Loop Original" title="The Kitchen Loop Original" />':''; }
+function tagsHtml(r){ return r.tags.split(',').map(t=>`<span class="tag ${tc(t)}">${esc(t.trim())}</span>`).join(''); }
+function tc(t){ const m={'Dinner':'dinner','Pasta':'pasta','Dessert':'dessert','Lunch':'lunch','Breakfast':'breakfast','Side':'side','Dressing':'dressing'}; return m[t.trim()]||''; }
+
+function renderRecipes(){
+  let f;
+  if(recipeFilter==='nevercooked'){
+    f=[...recipes].filter(r=>r.cookDates.length===0).sort((a,b)=>a.name.localeCompare(b.name));
+  } else if(recipeFilter && recipeFilter.startsWith('cat:')){
+    const cat=recipeFilter.replace('cat:','');
+    f=[...recipes].filter(r=>r.tags.split(',').map(t=>t.trim()).includes(cat)).sort((a,b)=>a.name.localeCompare(b.name));
+  } else {
+    const q=document.getElementById('search-input').value.toLowerCase();
+    const cat=document.getElementById('cat-filter').value;
+    const sort=document.getElementById('sort-filter').value;
+    f=recipes.filter(r=>{
+      const mq=!q||r.name.toLowerCase().includes(q)||r.ingredients.toLowerCase().includes(q);
+      const mc=!cat||r.tags.split(',').map(t=>t.trim()).includes(cat);
+      return mq&&mc;
+    });
+    if(sort==='cooks') f.sort((a,b)=>b.cookDates.length-a.cookDates.length);
+    else if(sort==='recent') f.sort((a,b)=>{const la=a.cookDates[a.cookDates.length-1]||''; const lb=b.cookDates[b.cookDates.length-1]||''; return lb>la?1:-1;});
+    else f.sort((a,b)=>a.name.localeCompare(b.name));
+  }
+  const grid=document.getElementById('recipe-grid');
+  if(!f.length && _dataLoadFailed){grid.innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;&#65039;</div>Couldn\'t load your recipes — check your connection and refresh</div>';return;}
+  if(!f.length){grid.innerHTML='<div class="empty-state"><div class="empty-icon">&#127859;</div>No recipes found</div>';return;}
+  grid.innerHTML=f.map(r=>`
+    <div class="recipe-card" onclick="openModal(${ridArg(r.id)})">
+      <h3${isOfficial(r)?' class="has-origin"':''}>${originIconHtml(r)}<span>${esc(r.name)}</span></h3>
+      <div class="tags">${tagsHtml(r)}</div>
+      <p class="card-ingredients">${esc(r.ingredients.split(',').slice(0,5).map(i=>i.trim()).join(', '))}${r.ingredients.split(',').length>5?'&hellip;':''}</p>
+      <p class="cook-count ${r.cookDates.length>0?'cooked':''}">${r.cookDates.length>0?`Cooked ${r.cookDates.length}\xd7`:'Not cooked yet'}</p>
+    </div>`).join('');
+}
+
+function buildHeatmap(){
+  const DAY=86400000;
+  const WEEKS=53;
+  const today=new Date(); today.setHours(0,0,0,0);
+  // anchor to nearest Sunday end so the grid aligns Mon–Sun columns
+  const dowToday=today.getDay(); // 0=Sun
+  const endDay=new Date(today.getTime()+(6-((dowToday+6)%7))*DAY); // next Sun (or today if Sun)
+  const startDay=new Date(endDay.getTime()-(WEEKS*7-1)*DAY);
+
+  // count cooks per day
+  const cooksByDay={};
+  recipes.forEach(r=>r.cookDates.forEach(d=>{
+    const key=d.slice(0,10);
+    cooksByDay[key]=(cooksByDay[key]||0)+1;
+  }));
+
+  const cells=[];
+  const monthLabels=Array(WEEKS).fill('');
+  let lastMonth=-1;
+  for(let i=0;i<WEEKS*7;i++){
+    const d=new Date(startDay.getTime()+i*DAY);
+    const key=d.toISOString().slice(0,10);
+    const n=cooksByDay[key]||0;
+    const label=d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const tip=n===0?`No cooks on ${label}`:`${n} cook${n>1?'s':''} on ${label}`;
+    const shade=n===0?0:n===1?1:n===2?2:3;
+    cells.push(`<div class="hm-cell" data-n="${shade}" title="${tip}"></div>`);
+    // first day of each week (i%7===0) — check if month changed
+    if(i%7===0){
+      const col=i/7;
+      const m=d.getMonth();
+      if(m!==lastMonth){ monthLabels[col]=d.toLocaleDateString('en-GB',{month:'short'}); lastMonth=m; }
+    }
+  }
+
+  const monthRow=monthLabels.map(l=>`<div style="font-size:10px;color:var(--text-faint);white-space:nowrap;overflow:visible;">${l}</div>`).join('');
+  const dayLabels=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div style="height:12px;line-height:12px;">${d}</div>`).join('');
+  return `<div class="heatmap-wrap">
+    <div class="heatmap-title">Activity — last 12 months</div>
+    <div class="heatmap-scroll">
+      <img src="thekitchenloop.png" aria-hidden="true" style="position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);height:96px;width:auto;opacity:0.5;pointer-events:none;user-select:none;">
+      <div style="display:flex;gap:6px;align-items:flex-start;">
+        <div style="width:28px;flex-shrink:0;"></div>
+        <div style="display:grid;grid-template-columns:repeat(${WEEKS},12px);gap:3px;margin-bottom:4px;">${monthRow}</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:flex-start;">
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:10px;color:var(--text-faint);padding-top:1px;white-space:nowrap;width:28px;flex-shrink:0;">${dayLabels}</div>
+        <div class="heatmap-grid">${cells.join('')}</div>
+      </div>
+    </div>
+    <div class="heatmap-legend">Less <div class="hm-legend-cell" style="background:var(--bg);border:1px solid var(--border);"></div><div class="hm-legend-cell" style="background:#b7e4c7;"></div><div class="hm-legend-cell" style="background:#52b788;"></div><div class="hm-legend-cell" style="background:#2d6a4f;"></div> More</div>
+  </div>`;
+}
+
+function renderCookLog(){
+  const cooked=recipes.filter(r=>r.cookDates.length>0).sort((a,b)=>b.cookDates.length-a.cookDates.length);
+  const c=document.getElementById('cooklog-container');
+  if(!cooked.length){c.innerHTML='<div class="empty-state" style="grid-column:unset"><div class="empty-icon">&#128218;</div>No cooks logged yet — tap "Cooked it!" on any recipe</div>';return;}
+  c.innerHTML=`<table class="log-table">
+    <thead><tr><th>Recipe</th><th>Categories</th><th>Times Cooked</th><th>Last Cooked</th><th>Adjust</th></tr></thead>
+    <tbody>${cooked.map(r=>{
+      const last=r.cookDates.length?new Date(r.cookDates[r.cookDates.length-1]).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+      const tooltipDates=r.cookDates.map((d,i)=>`Cook ${i+1}: ${new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}`).join('<br>');
+      return `<tr>
+        <td style="font-weight:500">${esc(r.name)}</td>
+        <td><div class="tags" style="margin:0">${tagsHtml(r)}</div></td>
+        <td>
+          <div class="tooltip-wrap">
+            <span class="cook-num-link">${r.cookDates.length}</span>
+            <div class="tooltip-box">${tooltipDates}</div>
+          </div>
+        </td>
+        <td style="color:var(--text-muted)">${last}</td>
+        <td>
+          <div class="cook-adjust">
+            <button class="adj-btn minus" onclick="adjustCook(${ridArg(r.id)},-1)" title="Remove one cook">−</button>
+            <span class="cook-num">${r.cookDates.length}</span>
+            <button class="adj-btn plus" onclick="adjustCook(${ridArg(r.id)},1)" title="Add one cook">+</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+function adjustCook(id, delta){
+  const r=recipes.find(x=>x.id===id); if(!r) return;
+  if(delta>0){ r.cookDates.push(new Date().toISOString()); }
+  else if(delta<0 && r.cookDates.length>0){ r.cookDates.pop(); }
+  saveR(); renderStats(); renderCookLog(); renderRecipes();
+  showToast(delta>0?`Added a cook to ${r.name}`:`Removed a cook from ${r.name}`);
+}
+
+function renderCategories(){
+  const cats=['Dinner','Pasta','Dessert','Lunch','Breakfast','Side','Dressing'];
+  const c=document.getElementById('cat-grid');
+  c.innerHTML=cats.map(cat=>{
+    const count=recipes.filter(r=>r.tags.split(',').map(t=>t.trim()).includes(cat)).length;
+    return `<div class="cat-card" onclick="browseCategory('${cat}')">
+      <div class="cat-icon">${CAT_ICONS[cat]||'🍴'}</div>
+      <div class="cat-name">${cat}</div>
+      <div class="cat-count">${count} recipe${count!==1?'s':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function browseCategory(cat){
+  recipeFilter='cat:'+cat;
+  document.getElementById('recipes-title').textContent=cat;
+  document.getElementById('recipes-subtitle').textContent=`All ${cat.toLowerCase()} recipes`;
+  document.getElementById('recipes-back-wrap').style.display='block';
+  document.getElementById('recipes-toolbar').style.display='none';
+  showView('recipes');
+  renderRecipes();
+}
+
+function setupLinkBtn(elId, url){
+  const el=document.getElementById(elId);
+  const href=url?safeUrl(url):'';
+  if(href){
+    el.href=href;
+    el.rel='noopener noreferrer';
+    el.dataset.recipeTelemetry='1';
+    el.style.display='inline-flex';
+  }else{
+    el.removeAttribute('href');
+    delete el.dataset.recipeTelemetry;
+    el.style.display='none';
+  }
+}
+
+// The Kitchen Loop originals keep their cooking method in the original social post, by
+// design. Their pop-up leads with a button to that post: TikTok first, then Instagram,
+// then Threads — whichever the recipe actually has.
+const METHOD_PLATFORMS=[['tiktokLink','TikTok'],['instagramLink','Instagram'],['threadsLink','Threads']];
+function setupMethodLink(r){
+  const wrap=document.getElementById('mv-method');
+  const a=document.getElementById('mv-method-link');
+  const found=isOfficial(r)?METHOD_PLATFORMS.map(([k,label])=>[safeUrl(r[k]||''),label]).find(([u])=>u):null;
+  if(!found){ a.removeAttribute('href'); delete a.dataset.recipeTelemetry; wrap.style.display='none'; return; }
+  const [href,label]=found;
+  a.href=href; a.dataset.recipeTelemetry='1'; a.textContent=`View cooking method on ${label} ↗`;
+  document.getElementById('mv-method-note').textContent=`The step-by-step method is in the original The Kitchen Loop post on ${label}. It opens in a new tab and needs an internet connection; everything else in this app works offline.`;
+  wrap.style.display='';
+}
+
+function setupTelemetryClickTracking(){
+  const modal=document.getElementById('recipe-modal');
+  if(!modal||modal.dataset.telemetryClickTracking==='1') return;
+  modal.dataset.telemetryClickTracking='1';
+  modal.addEventListener('click',e=>{
+    const target=e.target;
+    const link=target&&typeof target.closest==='function'?target.closest('a[data-recipe-telemetry]'):null;
+    if(link&&modal.contains(link)&&link.href) void sendTelemetry('social_clicked');
+  });
+}
+
+function openModal(id){
+  const r=recipes.find(x=>x.id===id); if(!r) return;
+  activeModalId=id;
+  document.getElementById('mv-title').textContent=r.name;
+  document.getElementById('mv-origin').classList.toggle('show',isOfficial(r));
+  document.getElementById('mv-tags').innerHTML=tagsHtml(r);
+  const last=r.cookDates.length?new Date(r.cookDates[r.cookDates.length-1]).toLocaleDateString():'';
+  document.getElementById('mv-cook-count').textContent=r.cookDates.length>0?`Cooked ${r.cookDates.length} time${r.cookDates.length>1?'s':''}${last?' · Last: '+last:''}`:'Never cooked yet';
+  document.getElementById('mv-ingredients').textContent=r.ingredients;
+  const nw=document.getElementById('mv-notes-wrap');
+  if(r.notes){document.getElementById('mv-notes').textContent=r.notes;nw.style.display='block';}else{nw.style.display='none';}
+  setupLinkBtn('mv-link-instagram', r.instagramLink);
+  setupLinkBtn('mv-link-tiktok', r.tiktokLink);
+  setupLinkBtn('mv-link-threads', r.threadsLink);
+  setupMethodLink(r);
+  document.getElementById('btn-cooked-it').style.display='';
+  document.getElementById('cook-confirm-prompt').style.display='none';
+  document.getElementById('cook-date-picker-wrap').style.display='none';
+  document.getElementById('modal-view').style.display='block';
+  document.getElementById('modal-edit').style.display='none';
+  document.getElementById('recipe-modal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('recipe-modal').classList.remove('open'); activeModalId=null; }
+function handleModalClick(e){ if(e.target===document.getElementById('recipe-modal')) closeModal(); }
+
+function logCook(){
+  document.getElementById('btn-cooked-it').style.display='none';
+  document.getElementById('cook-confirm-prompt').style.display='flex';
+}
+
+function confirmCookToday(){
+  doLogCook(new Date().toISOString());
+}
+
+function showCookDatePicker(){
+  const today=new Date().toISOString().split('T')[0];
+  const inp=document.getElementById('cook-date-input');
+  inp.value=today; inp.max=today;
+  document.getElementById('cook-confirm-prompt').style.display='none';
+  document.getElementById('cook-date-picker-wrap').style.display='flex';
+}
+
+function confirmCookDate(){
+  const val=document.getElementById('cook-date-input').value; if(!val) return;
+  const [y,m,d]=val.split('-').map(Number);
+  doLogCook(new Date(y,m-1,d).toISOString());
+}
+
+function doLogCook(dateISO){
+  const r=recipes.find(x=>x.id===activeModalId); if(!r) return;
+  r.cookDates.push(dateISO);
+  const fromPlan=planTickIdx!==null;
+  if(fromPlan){
+    plan[planTickIdx].cooked=true;
+    plan[planTickIdx].cookedDate=dateISO;
+    planTickIdx=null;
+    saveData();
+    closeModal();
+    renderStats(); renderRecipes(); renderCookLog(); renderPlan();
+  } else {
+    saveR(); openModal(activeModalId); renderStats(); renderRecipes(); renderCookLog();
+  }
+  showToast(`Logged! ${r.name} cooked ${r.cookDates.length}\xd7`);
+}
+
+function switchToEdit(){
+  const r=recipes.find(x=>x.id===activeModalId); if(!r) return;
+  document.getElementById('edit-canonical-fields').style.display='';
+  document.getElementById('edit-notes-label').textContent='Notes';
+  document.getElementById('edit-name').value=r.name;
+  document.getElementById('edit-ingredients').value=r.ingredients;
+  document.getElementById('edit-instagram-link').value=r.instagramLink||'';
+  document.getElementById('edit-tiktok-link').value=r.tiktokLink||'';
+  document.getElementById('edit-threads-link').value=r.threadsLink||'';
+  document.getElementById('edit-notes').value=r.notes||'';
+  document.getElementById('edit-pairswith').value=r.pairsWith||'';
+  const cur=r.tags.split(',').map(t=>t.trim());
+  document.querySelectorAll('#edit-cat-picker .cat-pill').forEach(p=>p.classList.toggle('selected',cur.includes(p.dataset.cat)));
+  document.getElementById('modal-view').style.display='none';
+  document.getElementById('modal-edit').style.display='block';
+}
+
+function switchToView(){ document.getElementById('modal-view').style.display='block'; document.getElementById('modal-edit').style.display='none'; }
+
+async function saveEdit(){
+  const r=recipes.find(x=>x.id===activeModalId); if(!r) return;
+
+  const name=document.getElementById('edit-name').value.trim();
+  const ingredients=document.getElementById('edit-ingredients').value.trim();
+  if(!name||!ingredients){showToast('Name and ingredients required');return;}
+  const cats=[...document.querySelectorAll('#edit-cat-picker .cat-pill.selected')].map(p=>p.dataset.cat);
+  const tags=cats.length?cats.join(', '):'Dinner';
+  const instagramLink=document.getElementById('edit-instagram-link').value.trim();
+  const tiktokLink=document.getElementById('edit-tiktok-link').value.trim();
+  const threadsLink=document.getElementById('edit-threads-link').value.trim();
+  const notes=document.getElementById('edit-notes').value.trim();
+  const pairsWith=document.getElementById('edit-pairswith').value.trim();
+
+  const linkErr=invalidLinkMessage(instagramLink, tiktokLink, threadsLink);
+  if(linkErr){ showToast(linkErr); return; }
+
+  const candidate=recipes.map(x=>x.id===r.id?{...x, name, tags, ingredients, instagramLink, tiktokLink, threadsLink, notes, pairsWith}:x);
+  const ok=await saveDataNow(candidate);
+  if(ok){ recipes=candidate; renderAll(); openModal(activeModalId); showToast('Recipe updated!'); void sendTelemetry('recipe_updated'); }
+}
+
+async function deleteCurrentRecipe(){
+  if(!activeModalId) return;
+  const r=recipes.find(x=>x.id===activeModalId); if(!r) return;
+  if(!confirm('Delete this recipe? Cannot be undone.')) return;
+
+  const candidate=recipes.filter(x=>x.id!==activeModalId);
+  const ok=await saveDataNow(candidate);
+  if(ok){ recipes=candidate; closeModal(); renderAll(); showToast('Recipe deleted'); }
+}
+
+function toggleCat(el){ el.classList.toggle('selected'); }
+
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const idx=['recipes','add','plan','shopping','stats','privacy'].indexOf(v);
+  if(idx>=0) document.querySelectorAll('nav button')[idx].classList.add('active');
+  if(v==='privacy') renderTelemetrySettings();
+}
+
+async function addRecipe(){
+  const name=document.getElementById('new-name').value.trim();
+  const ingredients=document.getElementById('new-ingredients').value.trim();
+  if(!name||!ingredients){showToast('Name and ingredients are required');return;}
+  const linkErr=invalidLinkMessage(...['new-instagram-link','new-tiktok-link','new-threads-link'].map(id=>document.getElementById(id).value.trim()));
+  if(linkErr){showToast(linkErr);return;}
+  const cats=[...document.querySelectorAll('#new-cat-picker .cat-pill.selected')].map(p=>p.dataset.cat);
+  const recipe={id:Date.now(),name,tags:cats.length?cats.join(', '):'Dinner',ingredients,notes:document.getElementById('new-notes').value.trim(),instagramLink:document.getElementById('new-instagram-link').value.trim(),tiktokLink:document.getElementById('new-tiktok-link').value.trim(),threadsLink:document.getElementById('new-threads-link').value.trim(),pairsWith:document.getElementById('new-pairswith').value.trim(),cookDates:[]};
+  const candidate=[...recipes,recipe];
+  const ok=await saveDataNow(candidate);
+  if(!ok) return;
+  recipes=candidate; clearForm(); renderAll(); showToast('Recipe saved!'); showView('recipes'); void sendTelemetry('recipe_created');
+}
+
+function clearForm(){
+  ['new-name','new-ingredients','new-notes','new-instagram-link','new-tiktok-link','new-threads-link','new-pairswith'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('#new-cat-picker .cat-pill').forEach(p=>p.classList.remove('selected'));
+}
+
+// Shows any CHANGELOG entries newer than the household's lastSeenChangelogVersion, once.
+function checkForChangelog(){
+  const unseen=CHANGELOG.filter(c=>c.version>lastSeenChangelogVersion);
+  if(!unseen.length){ maybeShowTelemetryPrompt(); return false; }
+  document.getElementById('changelog-entries').innerHTML=unseen.map(c=>`
+    <div class="changelog-entry">
+      <div class="changelog-date">${new Date(c.date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div>
+      <div>${esc(c.text)}</div>
+    </div>`).join('');
+  document.getElementById('changelog-modal').classList.add('open');
+  return true;
+}
+
+function handleChangelogModalClick(e){ if(e.target===document.getElementById('changelog-modal')) closeChangelogModal(); }
+
+function closeChangelogModal(){
+  document.getElementById('changelog-modal').classList.remove('open');
+  const newVersion=CHANGELOG[0].version;
+  lastSeenChangelogVersion=newVersion;
+  saveChangelogSeen(newVersion);
+  maybeShowTelemetryPrompt();
+}
+
+async function saveChangelogSeen(version){
+  try{
+    await apiWrite('/changelog-seen','PUT',{version});
+  }catch(e){}
+}
+
+function isSide(r){ return r.tags.split(',').map(t=>t.trim()).includes('Side'); }
+function isDressing(r){ return r.tags.split(',').map(t=>t.trim()).includes('Dressing'); }
+
+function generatePlan(){
+  const isDessert=r=>r.tags.split(',').map(t=>t.trim()).includes('Dessert');
+  const dinners=recipes.filter(r=>!isDessert(r)&&!isSide(r)&&!isDressing(r));
+  const desserts=recipes.filter(r=>isDessert(r));
+  if(dinners.length<14){showToast('Need at least 14 non-dessert, non-side recipes');return;}
+  const sd=[...dinners].sort(()=>Math.random()-0.5);
+  const sx=[...desserts].sort(()=>Math.random()-0.5);
+  const sl=[...LUNCH_ROTATIONS].sort(()=>Math.random()-0.5);
+  plan=[];
+  for(let w=1;w<=2;w++){
+    const off=(w-1)*7;
+    DAYS.forEach((day,i)=>plan.push({type:'dinner',week:w,day,recipeId:sd[off+i].id,recipeName:sd[off+i].name,sideId:null,sideName:null,cooked:false,cookedDate:null}));
+    plan.push({type:'lunch',week:w,day:'',recipeId:null,recipeName:sl[(w-1)%sl.length],cooked:false,cookedDate:null});
+    const dx=sx[(w-1)%(sx.length||1)];
+    plan.push({type:'dessert',week:w,day:'',recipeId:dx?dx.id:null,recipeName:dx?dx.name:'No desserts added yet',cooked:false,cookedDate:null});
+  }
+  saveP(); renderPlan(); showToast('Fortnight generated!');
+
+  // Check for side suggestions
+  const suggestions = [];
+  const sides = recipes.filter(isSide);
+  plan.filter(p=>p.type==='dinner').forEach(p=>{
+    sides.forEach(side=>{
+      if(!side.pairsWith) return;
+      const pairs = side.pairsWith.split(',').map(s=>s.trim().toLowerCase());
+      if(pairs.includes(p.recipeName.toLowerCase())){
+        suggestions.push({ dinnerPlanIdx: plan.indexOf(p), dinnerName: p.recipeName, sideId: side.id, sideName: side.name, week: p.week, day: p.day });
+      }
+    });
+  });
+  if(suggestions.length) showSidesModal(suggestions);
+}
+
+let pendingSuggestions = [];
+
+function showSidesModal(suggestions){
+  pendingSuggestions = suggestions;
+  document.getElementById('sides-suggestions').innerHTML = suggestions.map((s,i)=>`
+    <div class="side-suggestion">
+      <label>
+        <input type="checkbox" id="side-check-${i}" checked />
+        <div class="side-suggestion-text">
+          <div class="side-dinner">Week ${s.week} · ${esc(s.day)}</div>
+          <div class="side-name">${esc(s.dinnerName)} <span style="color:var(--text-faint)">→</span> ${esc(s.sideName)}</div>
+        </div>
+      </label>
+    </div>`).join('');
+  document.getElementById('sides-modal').classList.add('open');
+}
+
+function closeSidesModal(){ document.getElementById('sides-modal').classList.remove('open'); pendingSuggestions=[]; }
+function handleSidesModalClick(e){ if(e.target===document.getElementById('sides-modal')) closeSidesModal(); }
+
+let _ctCurrentId=null;
+
+function _ctPool(){ return recipes.filter(r=>r.tags.split(',').map(t=>t.trim()).includes('Dinner')&&!isSide(r)); }
+
+function _ctShow(r){
+  _ctCurrentId=r.id;
+  document.getElementById('ct-name').textContent=r.name;
+  document.getElementById('ct-tags').innerHTML=tagsHtml(r);
+  const ingList=r.ingredients.split(',');
+  document.getElementById('ct-ingredients').textContent=ingList.slice(0,6).map(i=>i.trim()).join(', ')+(ingList.length>6?'…':'');
+  document.getElementById('ct-cook-count').textContent=r.cookDates.length>0?`Cooked ${r.cookDates.length}\xd7`:'Not cooked yet';
+}
+
+function openCookTonight(){
+  const pool=_ctPool();
+  if(!pool.length){showToast('No dinner recipes found');return;}
+  document.getElementById('ct-pool-info').textContent=`${pool.length} dinner recipe${pool.length===1?'':'s'} in the pool`;
+  const r=pool[Math.floor(Math.random()*pool.length)];
+  _ctShow(r);
+  document.getElementById('cook-tonight-modal').classList.add('open');
+}
+
+function rerollCookTonight(){
+  const pool=_ctPool();
+  if(!pool.length) return;
+  const candidates=pool.length>1?pool.filter(r=>r.id!==_ctCurrentId):pool;
+  _ctShow(candidates[Math.floor(Math.random()*candidates.length)]);
+}
+
+function closeCookTonightModal(){ document.getElementById('cook-tonight-modal').classList.remove('open'); _ctCurrentId=null; }
+function handleCookTonightClick(e){ if(e.target===document.getElementById('cook-tonight-modal')) closeCookTonightModal(); }
+
+function cookTonightGo(){
+  const id=_ctCurrentId;
+  closeCookTonightModal();
+  if(id!=null) openModal(id);
+}
+
+function addSelectedSides(){
+  pendingSuggestions.forEach((s,i)=>{
+    const cb=document.getElementById('side-check-'+i);
+    if(cb&&cb.checked){ plan[s.dinnerPlanIdx].sideId=s.sideId; plan[s.dinnerPlanIdx].sideName=s.sideName; }
+  });
+  saveP(); renderPlan(); closeSidesModal(); showToast('Sides added to plan!');
+}
+
+function addAllSides(){
+  pendingSuggestions.forEach(s=>{ plan[s.dinnerPlanIdx].sideId=s.sideId; plan[s.dinnerPlanIdx].sideName=s.sideName; });
+  saveP(); renderPlan(); closeSidesModal(); showToast('All sides added!');
+}
+
+function clearPlan(){ plan=[]; saveP(); renderPlan(); showToast('Plan cleared'); }
+function removePlanItem(i){ plan.splice(i,1); saveP(); renderPlan(); }
+
+// ── Custom shopping list (pick-your-own-recipes) ────────────────────────────
+function ridArg(id){ return typeof id==='string'?`'${id.replace(/'/g,"\\'")}'`:id; }
+
+function renderCustomListSearch(){
+  const input=document.getElementById('custom-list-search');
+  const box=document.getElementById('custom-list-search-results');
+  const q=input.value.trim().toLowerCase();
+  if(!q){ box.classList.remove('open'); box.innerHTML=''; return; }
+  const matches=recipes.filter(r=>!customListRecipeIds.includes(r.id)&&(r.name.toLowerCase().includes(q)||r.ingredients.toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name)).slice(0,8);
+  box.innerHTML=matches.length
+    ? matches.map(r=>`<div class="custom-list-search-result" onclick="addToCustomList(${ridArg(r.id)})">${esc(r.name)}</div>`).join('')
+    : '<div class="custom-list-search-result disabled">No matching recipes</div>';
+  box.classList.add('open');
+}
+
+function addToCustomList(id){
+  if(!customListRecipeIds.includes(id)) customListRecipeIds.push(id);
+  const input=document.getElementById('custom-list-search');
+  input.value=''; input.focus();
+  const box=document.getElementById('custom-list-search-results');
+  box.classList.remove('open'); box.innerHTML='';
+  saveCustomList();
+  renderCustomListChips();
+}
+
+function removeFromCustomList(id){
+  customListRecipeIds=customListRecipeIds.filter(x=>x!==id);
+  saveCustomList();
+  renderCustomListChips();
+}
+
+function renderCustomListChips(){
+  const c=document.getElementById('custom-list-chips'); if(!c) return;
+  if(!customListRecipeIds.length){ c.innerHTML='<div class="empty-state" style="grid-column:unset"><div class="empty-icon">&#128722;</div>Search above to add recipes to your custom list</div>'; return; }
+  c.innerHTML=customListRecipeIds.map(id=>{
+    const r=recipes.find(x=>x.id===id);
+    return `<div class="custom-list-chip">${esc(r?r.name:'Unknown recipe')}<button onclick="removeFromCustomList(${ridArg(id)})" title="Remove">&#215;</button></div>`;
+  }).join('');
+}
+
+function buildCustomShoppingList(){
+  if(!customListRecipeIds.length){ showToast('Add at least one recipe first'); return; }
+  saveCustomList();
+  switchShoppingTab('custom');
+  showView('shopping');
+}
+
+async function archiveCustomList(){
+  if(!customListRecipeIds.length){ showToast('No active custom list to archive'); return; }
+  // Flush any pending debounced save first — otherwise it could land after the archive
+  // resets the server's customList and silently resurrect the just-archived recipes.
+  clearTimeout(_customListSaveTimer);
+  if(!(await saveCustomListNow())) return;
+  let res;
+  try{ res=await apiWrite('/custom-list/archive','POST'); }
+  catch(e){ showToast(`Archive failed — ${e.message}`); return; }
+  planHistory.unshift(res.entry);
+  customListRecipeIds=[]; customListShoppingChecked={}; customListCreatedAt=null;
+  renderPlanHistory(); renderCustomListChips(); renderShopping();
+  switchPlanTab('history');
+  showToast('Custom list archived!');
+}
+
+async function clearCustomList(){
+  // Cancel any pending debounced save so it can't land after this and resurrect stale chips.
+  clearTimeout(_customListSaveTimer);
+  let res;
+  try{ res=await apiWrite('/custom-list/clear','POST'); }
+  catch(e){ showToast(`Clear failed — ${e.message}`); return; }
+  customListRecipeIds=[]; customListShoppingChecked={}; customListCreatedAt=null;
+  renderCustomListChips(); renderShopping();
+  showToast('Custom list cleared');
+}
+
+function switchPlanTab(tab){
+  document.getElementById('plan-tab-active').classList.toggle('active',tab==='active');
+  document.getElementById('plan-tab-history').classList.toggle('active',tab==='history');
+  document.getElementById('plan-tab-custom').classList.toggle('active',tab==='custom');
+  document.getElementById('plan-active-content').style.display=tab==='active'?'':'none';
+  document.getElementById('plan-history-content').style.display=tab==='history'?'':'none';
+  document.getElementById('plan-custom-content').style.display=tab==='custom'?'':'none';
+}
+
+function tickPlanMeal(idx){
+  const item=plan[idx]; if(!item||item.cooked) return;
+  if(item.recipeId){
+    planTickIdx=idx;
+    openModal(item.recipeId);
+    logCook();
+  } else {
+    item.cooked=true; item.cookedDate=new Date().toISOString();
+    saveData(); renderPlan(); showToast('Marked as cooked!');
+  }
+}
+
+function archivePlan(){
+  if(!plan.length){showToast('No active plan to archive');return;}
+  const label=new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  planHistory.unshift({savedAt:label,entries:plan.map(p=>({...p}))});
+  plan=[];
+  saveData(); renderPlan(); renderPlanHistory();
+  switchPlanTab('history');
+  showToast('Plan archived!');
+}
+
+function renderPlanHistory(){
+  const c=document.getElementById('plan-history-container'); if(!c) return;
+  if(!planHistory.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">&#128203;</div>No archived plans yet — archive your active plan or custom list to see it here</div>';return;}
+  c.innerHTML=planHistory.map((ph,hi)=>{
+    if(ph.type==='custom'){
+      const total=ph.entries.length;
+      return `<div class="plan-history-entry">
+        <div class="plan-history-header" onclick="toggleHistory(${hi})">
+          <span class="plan-history-label">&#128722; Custom List — ${esc(ph.savedAt)}</span>
+          <span class="plan-history-meta">${total} recipe${total===1?'':'s'}</span>
+          <span class="plan-history-toggle" id="ph-toggle-${hi}">&#9654;</span>
+        </div>
+        <div class="plan-history-body" id="ph-body-${hi}" style="display:none">
+          <div class="plan-grid" style="margin-top:0.75rem;">${ph.entries.map(e=>`<div class="plan-history-card"><div class="plan-recipe">${esc(e.recipeName)}</div></div>`).join('')}</div>
+        </div>
+      </div>`;
+    }
+    const total=ph.entries.length;
+    const cooked=ph.entries.filter(e=>e.cooked).length;
+    return `<div class="plan-history-entry">
+      <div class="plan-history-header" onclick="toggleHistory(${hi})">
+        <span class="plan-history-label">&#128197; Fortnightly Plan — ${esc(ph.savedAt)}</span>
+        <span class="plan-history-meta">${cooked}/${total} cooked</span>
+        <span class="plan-history-toggle" id="ph-toggle-${hi}">&#9654;</span>
+      </div>
+      <div class="plan-history-body" id="ph-body-${hi}" style="display:none">
+        ${renderHistoryWeek(ph.entries,1)}${renderHistoryWeek(ph.entries,2)}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderHistoryWeek(entries,w){
+  const dinners=entries.filter(p=>p.week===w&&p.type==='dinner');
+  const lunch=entries.find(p=>p.week===w&&p.type==='lunch');
+  const dessert=entries.find(p=>p.week===w&&p.type==='dessert');
+  const hCard=(p,extraClass='')=>`
+    <div class="plan-history-card${p.cooked?' plan-cooked':''}">
+      <div class="plan-day">${esc(p.day)}</div>
+      <div class="plan-recipe">${p.cooked?'&#10003; ':''}${esc(p.recipeName)}</div>
+      ${p.cookedDate?`<div class="plan-cooked-date">${new Date(p.cookedDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>`:''}
+    </div>`;
+  return `
+    <div class="plan-section-label" style="margin-top:1rem">Week ${w} — Dinners</div>
+    <div class="plan-grid">${dinners.map(p=>hCard(p)).join('')}</div>
+    <div class="plan-extras-row" style="margin-top:10px">
+      ${lunch?`<div class="plan-extra-card plan-extra-lunch${lunch.cooked?' plan-cooked':''}"><div class="plan-extra-label">&#127828; Lunch</div><div class="plan-recipe">${lunch.cooked?'&#10003; ':''}${esc(lunch.recipeName)}</div>${lunch.cookedDate?`<div class="plan-cooked-date">${new Date(lunch.cookedDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>`:''}</div>`:''}
+      ${dessert?`<div class="plan-extra-card plan-extra-dessert${dessert.cooked?' plan-cooked':''}"><div class="plan-extra-label">&#127874; Dessert</div><div class="plan-recipe">${dessert.cooked?'&#10003; ':''}${esc(dessert.recipeName)}</div>${dessert.cookedDate?`<div class="plan-cooked-date">${new Date(dessert.cookedDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>`:''}</div>`:''}
+    </div>`;
+}
+
+function toggleHistory(hi){
+  const body=document.getElementById('ph-body-'+hi);
+  const toggle=document.getElementById('ph-toggle-'+hi);
+  const open=body.style.display!=='none';
+  body.style.display=open?'none':'';
+  toggle.innerHTML=open?'&#9654;':'&#9660;';
+}
+
+function planCookedDateStr(p){ return p.cookedDate?new Date(p.cookedDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):''; }
+
+function renderPlan(){
+  const c=document.getElementById('plan-container');
+  if(!plan.length){c.innerHTML='<div class="empty-state" style="grid-column:unset"><div class="empty-icon">&#128197;</div>Hit "Auto-generate" to build your fortnight</div>';return;}
+  const mkTick=(idx,cooked)=>cooked
+    ?`<button class="plan-tick ticked" disabled title="Cooked">&#10003;</button>`
+    :`<button class="plan-tick" onclick="tickPlanMeal(${idx})" title="Mark as cooked">&#10003;</button>`;
+  const rw=w=>{
+    const dinners=plan.map((p,i)=>({...p,i})).filter(p=>p.week===w&&p.type==='dinner');
+    const lunch=plan.map((p,i)=>({...p,i})).find(p=>p.week===w&&p.type==='lunch');
+    const dessert=plan.map((p,i)=>({...p,i})).find(p=>p.week===w&&p.type==='dessert');
+    return `
+      <div class="plan-section-label">Week ${w} — Dinners</div>
+      <div class="plan-grid">${dinners.map(p=>`
+        <div class="plan-card${p.cooked?' plan-cooked':''}">
+          <button class="plan-remove" onclick="removePlanItem(${p.i})">&#215;</button>
+          <div class="plan-day">${esc(p.day)}</div>
+          <div class="plan-recipe">${esc(p.recipeName)}</div>
+          ${p.sideName?`<div class="plan-side-note">+ ${esc(p.sideName)}</div>`:''}
+          <div style="display:flex;align-items:center;gap:6px;">
+            ${mkTick(p.i,p.cooked)}
+            ${p.cookedDate?`<span class="plan-cooked-date">${planCookedDateStr(p)}</span>`:''}
+          </div>
+        </div>`).join('')}</div>
+      <div class="plan-extras-row">
+        <div class="plan-extra-card plan-extra-lunch${lunch&&lunch.cooked?' plan-cooked':''}">
+          ${lunch?`<button class="plan-remove" onclick="removePlanItem(${lunch.i})">&#215;</button>`:''}
+          <div class="plan-extra-label">&#127828; Lunch rotation</div>
+          <div class="plan-recipe">${lunch?esc(lunch.recipeName):'—'}</div>
+          ${lunch?`<div style="display:flex;align-items:center;gap:6px;">${mkTick(lunch.i,lunch.cooked)}${lunch.cookedDate?`<span class="plan-cooked-date">${planCookedDateStr(lunch)}</span>`:''}</div>`:''}
+        </div>
+        <div class="plan-extra-card plan-extra-dessert${dessert&&dessert.cooked?' plan-cooked':''}">
+          ${dessert?`<button class="plan-remove" onclick="removePlanItem(${dessert.i})">&#215;</button>`:''}
+          <div class="plan-extra-label">&#127874; Dessert of the week</div>
+          <div class="plan-recipe">${dessert?esc(dessert.recipeName):'—'}</div>
+          ${dessert?`<div style="display:flex;align-items:center;gap:6px;">${mkTick(dessert.i,dessert.cooked)}${dessert.cookedDate?`<span class="plan-cooked-date">${planCookedDateStr(dessert)}</span>`:''}</div>`:''}
+        </div>
+      </div>`;
+  };
+  c.innerHTML=rw(1)+rw(2);
+}
+
+function savePlanAndShop(){ saveP(); switchShoppingTab('plan'); showView('shopping'); }
+function isFresh(i){ const l=i.toLowerCase(); return FRESH.some(k=>l.includes(k)); }
+
+// The recipe-ID list backing each shopping tab: the fortnightly plan pulls dinner/dessert
+// recipes plus their paired sides, while the custom list is just whatever chips are picked.
+function planShoppingRecipeIds(){
+  const ids=[];
+  plan.filter(p=>p.type==='dinner'||p.type==='dessert').forEach(p=>{
+    if(p.recipeId!=null) ids.push(p.recipeId);
+    if(p.sideId) ids.push(p.sideId);
+  });
+  return ids;
+}
+function currentShoppingIds(){ return currentShoppingTab==='plan' ? planShoppingRecipeIds() : customListRecipeIds; }
+function currentShoppingChecked(){ return currentShoppingTab==='plan' ? shoppingChecked : customListShoppingChecked; }
+
+// Shared aggregation: given a list of recipe IDs, split their combined ingredients into
+// Big Shop / Fresh Top-ups / Staples — used by both the Plan tab and the Custom List tab.
+function aggregateIngredients(recipeIds){
+  const allIng=new Map();
+  recipeIds.forEach(id=>{
+    const r=recipes.find(x=>x.id===id); if(!r) return;
+    r.ingredients.split(',').forEach(ing=>{ const cl=ing.trim(); if(!allIng.has(cl)) allIng.set(cl,[]); allIng.get(cl).push(r.name); });
+  });
+  const toBuy=[],stapleCheck=[];
+  allIng.forEach((_,ing)=>{ if(STAPLES.has(ing)) stapleCheck.push(ing); else toBuy.push(ing); });
+  return { fresh:toBuy.filter(isFresh).sort(), big:toBuy.filter(i=>!isFresh(i)).sort(), staples:stapleCheck.sort() };
+}
+
+function switchShoppingTab(tab){
+  currentShoppingTab=tab;
+  document.getElementById('shopping-tab-plan').classList.toggle('active',tab==='plan');
+  document.getElementById('shopping-tab-custom').classList.toggle('active',tab==='custom');
+  renderShopping();
+}
+
+// Ingredient strings for the currently rendered list, referenced by index from the checkbox
+// handlers so free-text ingredient names never have to be embedded in inline JavaScript.
+let _shoppingItems=[];
+function renderShopping(){
+  const c=document.getElementById('shopping-container');
+  const ids=currentShoppingIds();
+  if(!ids.length){
+    c.innerHTML=currentShoppingTab==='plan'
+      ? '<div class="empty-state" style="grid-column:unset"><div class="empty-icon">&#128722;</div>Generate a plan first</div>'
+      : '<div class="empty-state" style="grid-column:unset"><div class="empty-icon">&#128722;</div>Add recipes to your custom list first</div>';
+    return;
+  }
+  const {big,fresh,staples}=aggregateIngredients(ids);
+  const checked=currentShoppingChecked();
+  _shoppingItems=[];
+  const ri=items=>`<div class="shopping-items">${items.map(i=>{const k=_shoppingItems.push(i)-1;return `<label class="shopping-item${checked[i]?' checked':''}"><input type="checkbox" ${checked[i]?'checked':''} onchange="toggleCheck(_shoppingItems[${k}],this.checked)" />${esc(i)}</label>`;}).join('')}</div>`;
+  c.innerHTML=`
+    <div class="shopping-section"><h3>Big shop <span class="shopping-count">${big.length}</span></h3>${ri(big)}</div>
+    <div class="shopping-section"><h3>Fresh top-ups <span class="shopping-count">${fresh.length}</span></h3>${ri(fresh)}</div>
+    <div class="shopping-section"><h3>Staples to check <span class="shopping-count">${staples.length}</span></h3>${ri(staples)}</div>
+    <div style="margin-top:1rem;"><button class="btn btn-secondary" onclick="clearChecks()">Clear all ticks</button></div>`;
+}
+
+function toggleCheck(item,checked){
+  currentShoppingChecked()[item]=checked;
+  if(currentShoppingTab==='plan') saveS(); else saveCustomList();
+  document.querySelectorAll('.shopping-item').forEach(el=>{ if(el.textContent.trim()===item) el.classList.toggle('checked',checked); });
+}
+function clearChecks(){
+  if(currentShoppingTab==='plan'){ shoppingChecked={}; saveS(); } else { customListShoppingChecked={}; saveCustomList(); }
+  renderShopping();
+}
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+function exportPDF(mode){
+  mode = mode==='custom' ? 'custom' : 'plan';
+  if(mode==='plan' && !plan.length){ showToast('Generate a plan first'); return; }
+  if(mode==='custom' && !customListRecipeIds.length){ showToast('Add recipes to your custom list first'); return; }
+
+  const ids = mode==='plan' ? planShoppingRecipeIds() : customListRecipeIds;
+  const checked = mode==='plan' ? shoppingChecked : customListShoppingChecked;
+  const {big,fresh,staples} = aggregateIngredients(ids);
+  const bigU=big.filter(i=>!checked[i]);
+  const freshU=fresh.filter(i=>!checked[i]);
+  const staplesU=staples.filter(i=>!checked[i]);
+
+  const renderShopCol = (title, items) => `
+    <div>
+      <div class="pdf-shop-section-title">${title}</div>
+      ${items.length ? items.map(i=>`<div class="pdf-shop-item"><span class="pdf-checkbox"></span>${esc(i)}</div>`).join('') : '<div style="font-size:11px;color:#a09d96;font-style:italic;">All stocked up!</div>'}
+    </div>`;
+
+  const date = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const titleLabel = mode==='plan' ? 'Fortnightly Plan' : 'Custom List';
+
+  let mealSection;
+  if(mode==='plan'){
+    const renderWeek = w => {
+      const dinners=plan.filter(p=>p.week===w&&p.type==='dinner');
+      const lunch=plan.find(p=>p.week===w&&p.type==='lunch');
+      const dessert=plan.find(p=>p.week===w&&p.type==='dessert');
+      return `
+        <div>
+          <div class="pdf-week-title">Week ${w}</div>
+          ${dinners.map(p=>`<div class="pdf-day-row"><span class="pdf-day">${esc(p.day.slice(0,3))}</span><span class="pdf-meal">${esc(p.recipeName)}${p.sideName?` <span style="color:#a09d96;font-size:10px;">+ ${esc(p.sideName)}</span>`:''}</span></div>`).join('')}
+          <div class="pdf-extras">
+            <div class="pdf-extra pdf-extra-lunch"><div class="pdf-extra-label">&#127828; Lunch</div><div class="pdf-extra-name">${lunch?esc(lunch.recipeName):'—'}</div></div>
+            <div class="pdf-extra pdf-extra-dessert"><div class="pdf-extra-label">&#127874; Dessert</div><div class="pdf-extra-name">${dessert?esc(dessert.recipeName):'—'}</div></div>
+          </div>
+        </div>`;
+    };
+    mealSection = `<div class="pdf-weeks">${renderWeek(1)}${renderWeek(2)}</div><hr class="pdf-divider" />`;
+  } else {
+    const names = customListRecipeIds.map(id=>{ const r=recipes.find(x=>x.id===id); return r?r.name:null; }).filter(Boolean);
+    mealSection = `
+      <div class="pdf-shop-section-title">Recipes in this list</div>
+      ${names.map(n=>`<div class="pdf-shop-item">${esc(n)}</div>`).join('')}
+      <hr class="pdf-divider" />`;
+  }
+
+  document.getElementById('pdf-page').innerHTML = `
+    <div class="pdf-header">
+      <div class="pdf-logo"><div class="pdf-logo-dot"></div>The Kitchen Loop</div>
+      <div class="pdf-date">Generated ${date} &mdash; ${titleLabel}</div>
+    </div>
+    ${mealSection}
+    <div class="pdf-shop-title">Shopping List — items still needed</div>
+    <div class="pdf-shop-grid">
+      ${renderShopCol('Big Shop', bigU)}
+      ${renderShopCol('Fresh Top-ups', freshU)}
+      ${renderShopCol('Staples to Check', staplesU)}
+    </div>
+    <div class="pdf-footer">The Kitchen Loop &mdash; Community Edition</div>
+  `;
+
+  document.getElementById('print-wrapper').style.display='block';
+  setTimeout(()=>{
+    window.print();
+    document.getElementById('print-wrapper').style.display='none';
+  }, 200);
+}
+
+// Notion-flavored Markdown checklist of unticked items, grouped the same way the PDF is —
+// a section is omitted entirely (no empty "## " header) if everything in it is ticked.
+function buildShoppingMarkdown(mode){
+  const ids = mode==='plan' ? planShoppingRecipeIds() : customListRecipeIds;
+  const checked = mode==='plan' ? shoppingChecked : customListShoppingChecked;
+  const {big,fresh,staples} = aggregateIngredients(ids);
+  const section=(title,items)=>{
+    const unticked=items.filter(i=>!checked[i]);
+    return unticked.length ? `## ${title}\n${unticked.map(i=>`- [ ] ${i}`).join('\n')}` : '';
+  };
+  return [section('Big Shop',big),section('Fresh Top-ups',fresh),section('Staples to Check',staples)].filter(Boolean).join('\n\n');
+}
+
+function shoppingListEmptyGuard(mode){
+  if(mode==='plan' && !plan.length){ showToast('Generate a plan first'); return true; }
+  if(mode==='custom' && !customListRecipeIds.length){ showToast('Add recipes to your custom list first'); return true; }
+  return false;
+}
+
+async function copyShoppingList(){
+  const mode=currentShoppingTab;
+  if(shoppingListEmptyGuard(mode)) return;
+  const md=buildShoppingMarkdown(mode);
+  if(!md){ showToast('Nothing left to buy — all ticked off!'); return; }
+  try{
+    await navigator.clipboard.writeText(md);
+    showToast('Copied — paste into Notion, Messages, anywhere');
+  }catch(e){
+    showToast('Copy failed — check clipboard permissions');
+  }
+}
+
+async function shareShoppingList(){
+  const mode=currentShoppingTab;
+  if(shoppingListEmptyGuard(mode)) return;
+  const md=buildShoppingMarkdown(mode);
+  if(!md){ showToast('Nothing left to buy — all ticked off!'); return; }
+  try{
+    await navigator.share({ text: md });
+  }catch(e){
+    // Share sheet dismissed/cancelled by the user — nothing to surface.
+  }
+}
+
+// ── Stats Dashboard ──────────────────────────────────────────────────────────
+
+const PROTEIN_RULES = [
+  { cat: 'Chicken',     re: /chicken/ },
+  { cat: 'Beef',        re: /beef/ },
+  { cat: 'Lamb',        re: /lamb/ },
+  { cat: 'Pork',        re: /pork|pancetta|bacon|sausage|chorizo|gammon/ },
+  { cat: 'Fish/Seafood',re: /fish|salmon|tuna|prawns|anchov/ },
+];
+const PROTEIN_COLORS = {
+  Chicken: '#2d6a4f', Vegetarian: '#8b6500', Beef: '#a0522d',
+  'Fish/Seafood': '#1a4fa0', Pork: '#8b2080', Lamb: '#6b5a3e'
+};
+const PROTEIN_ORDER = ['Chicken','Beef','Lamb','Pork','Fish/Seafood','Vegetarian'];
+
+function classifyProtein(r) {
+  if (r.proteinCategory) return r.proteinCategory;
+  const ing = r.ingredients.toLowerCase();
+  const match = PROTEIN_RULES.find(({ re }) => re.test(ing));
+  r.proteinCategory = match ? match.cat : 'Vegetarian';
+  return r.proteinCategory;
+}
+
+
+function renderStatsDashboard() {
+  const elH = document.getElementById('sd-headline-wrap');
+  const elT = document.getElementById('sd-trend-wrap');
+  const elL = document.getElementById('sd-leaderboards-wrap');
+  const elP = document.getElementById('sd-profile-wrap');
+  if (!elH) return;
+
+  // Protein stats
+  const catCooks = {}, catRecipes = {};
+  PROTEIN_ORDER.forEach(c => { catCooks[c] = 0; catRecipes[c] = 0; });
+  let totalCooks = 0;
+  recipes.forEach(r => {
+    const cat = classifyProtein(r);
+    catCooks[cat] += r.cookDates.length;
+    catRecipes[cat]++;
+    totalCooks += r.cookDates.length;
+  });
+  const totalRecipes = recipes.length;
+
+  // 1. Headline
+  let headline = 'Start cooking to reveal your household\'s flavour profile!';
+  if (totalCooks > 0) {
+    const sorted = Object.entries(catCooks).filter(([,v]) => v > 0).sort(([,a],[,b]) => b - a);
+    if (sorted.length) {
+      const [[c1, n1]] = sorted;
+      const p1 = Math.round(n1 / totalCooks * 100);
+      if (sorted.length >= 2) {
+        const [c2, n2] = sorted[1];
+        const p2 = Math.round(n2 / totalCooks * 100);
+        if (Math.abs(p1 - p2) <= 10) {
+          headline = `You're a <strong>${c1} &amp; ${c2}</strong> household — ${p1 + p2}% of your cooks lean that way.`;
+        } else {
+          headline = `You're a <strong>${c1}</strong> household — ${p1}% of your cooks lean that way.`;
+        }
+      } else {
+        headline = `You're a <strong>${c1}</strong> household — ${p1}% of your cooks lean that way.`;
+      }
+    }
+  }
+  elH.innerHTML = `<div class="sd-section"><p class="sd-headline">${headline}</p></div>`;
+
+  // 2. This month vs last month
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  const thisMonthStart = new Date(y, m, 1);
+  const lastMonthStart = new Date(y, m - 1, 1);
+  const lastMonthEnd   = new Date(y, m, 1);
+  let cooksThisMonth = 0, cooksLastMonth = 0;
+  recipes.forEach(r => r.cookDates.forEach(d => {
+    const dt = new Date(d);
+    if (dt >= thisMonthStart) cooksThisMonth++;
+    else if (dt >= lastMonthStart && dt < lastMonthEnd) cooksLastMonth++;
+  }));
+  let deltaHtml;
+  if (cooksThisMonth === 0 && cooksLastMonth === 0) {
+    deltaHtml = `<span style="color:var(--text-muted);">No cooks logged yet this month or last</span>`;
+  } else if (cooksLastMonth === 0) {
+    deltaHtml = `<span style="color:var(--accent);">First time cooking this much!</span>`;
+  } else if (cooksThisMonth === cooksLastMonth) {
+    deltaHtml = `<span style="color:var(--text-muted);">Same as last month</span>`;
+  } else if (cooksThisMonth > cooksLastMonth) {
+    const pct = Math.round((cooksThisMonth - cooksLastMonth) / cooksLastMonth * 100);
+    deltaHtml = `<span style="color:var(--accent);">&#8593; ${pct}% more cooking than last month</span>`;
+  } else {
+    const pct = Math.round((cooksLastMonth - cooksThisMonth) / cooksLastMonth * 100);
+    deltaHtml = `<span style="color:var(--text-muted);">&#8595; ${pct}% less cooking than last month</span>`;
+  }
+  elT.innerHTML = `<div class="sd-section">
+    <div class="sd-section-title">This Month vs Last Month</div>
+    <div style="display:flex;gap:2.5rem;align-items:flex-end;margin-bottom:0.75rem;">
+      <div>
+        <div style="font-size:28px;font-weight:600;line-height:1;">${cooksThisMonth}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">This month</div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:600;line-height:1;color:var(--text-faint);">${cooksLastMonth}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Last month</div>
+      </div>
+    </div>
+    <div style="font-size:13px;">${deltaHtml}</div>
+  </div>`;
+
+  // 3. Leaderboards
+  const cooked = recipes.filter(r => r.cookDates.length > 0);
+  const top5 = [...cooked].sort((a,b) => b.cookDates.length - a.cookDates.length).slice(0, 5);
+  const under5 = [...cooked].sort((a,b) => a.cookDates.length - b.cookDates.length).slice(0, 5);
+
+  const lbRows = (arr) => arr.length
+    ? arr.map((r, i) => `<div class="sd-lb-item">
+        <span class="sd-lb-rank">${i+1}</span>
+        <span class="sd-lb-name">${esc(r.name)}</span>
+        <span class="sd-lb-count">${r.cookDates.length}&times;</span>
+      </div>`).join('')
+    : '<p class="sd-empty">No cooked recipes yet</p>';
+
+  elL.innerHTML = `<div class="sd-two-col" style="margin-bottom:1.25rem;">
+    <div class="sd-card">
+      <div class="sd-card-title">&#127942; Top Recipes</div>
+      ${lbRows(top5)}
+    </div>
+    <div class="sd-card">
+      <div class="sd-card-title">&#128149; Underrated</div>
+      ${lbRows(under5)}
+    </div>
+  </div>`;
+
+  // 4. Profile
+  const renderBars = (getValue) => PROTEIN_ORDER
+    .map(cat => ({ cat, val: getValue(cat) }))
+    .filter(({ val }) => val > 0)
+    .sort((a,b) => b.val - a.val)
+    .map(({ cat, val }) => `<div class="sd-bar-wrap">
+      <div class="sd-bar-label-row">
+        <span class="sd-bar-label">${cat}</span>
+        <span class="sd-bar-pct">${val}%</span>
+      </div>
+      <div class="sd-bar-track">
+        <div class="sd-bar-fill" style="width:${val}%;background:${PROTEIN_COLORS[cat]};"></div>
+      </div>
+    </div>`).join('') || '<p class="sd-empty">No data yet</p>';
+
+  const cookBars = renderBars(cat => totalCooks > 0 ? Math.round(catCooks[cat] / totalCooks * 100) : 0);
+  const recipeBars = renderBars(cat => totalRecipes > 0 ? Math.round(catRecipes[cat] / totalRecipes * 100) : 0);
+
+  elP.innerHTML = `<div class="sd-section">
+    <div class="sd-section-title">Your Profile</div>
+    <div class="sd-two-col">
+      <div>
+        <div class="sd-card-title" style="margin-bottom:0.75rem;">By cook frequency</div>
+        ${cookBars}
+      </div>
+      <div>
+        <div class="sd-card-title" style="margin-bottom:0.75rem;">By recipe count</div>
+        ${recipeBars}
+      </div>
+    </div>
+  </div>`;
+}
+
+if(navigator.share) document.getElementById('shopping-share-btn').style.display='';
+
+renderTelemetrySettings();
+setupTelemetryClickTracking();
+loadData();
+sendDueTelemetry();
+</script>
+</body>
+</html>
