@@ -69,11 +69,24 @@ Open a terminal, navigate to your `kitchen-loop-community` directory and run:
 npm start
 ```
 
-### Video walkthrough
 
-A short Linux installation video is also available through The Kitchen Loop's LinkedIn updates.
+### 🎬 Video Installation Guide
 
-*Video link will be added following publication.*
+Watch our 30-second Fedora Linux installation walkthrough.
+
+The video demonstrates Option 1 (Quick Start), including installing dependencies, cloning the repository and launching The Kitchen Loop.
+
+**Watch on your preferred platform:**
+
+- 💼 [LinkedIn — Installation Video](https://lnkd.in/p/dvX5jY_h)
+- 📸 [Instagram — Installation Reel](https://www.instagram.com/reel/De_VGXBg2On/)
+- 🎵 [TikTok — Installation Video](https://www.tiktok.com/@the_kitchen_loop/video/7701248856448650518)
+- 🧵 [Threads — Installation Video](https://www.threads.com/share/D4OVTuq3N/)
+
+**Using Ubuntu, Debian or Linux Mint?**
+
+The video demonstrates Fedora's `dnf` package manager. Use `apt` instead when installing dependencies in Step 1. Steps 2 and 3 remain the same, provided you have Node.js 22 or newer.
+
 
 ---
 
